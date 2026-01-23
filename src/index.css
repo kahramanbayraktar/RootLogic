@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* The Root Logic - Intellectual Boutique Design System */
+
+@layer base {
+  :root {
+    /* Core palette - Warm parchment with deep ink */
+    --background: 45 25% 96%;
+    --foreground: 220 30% 12%;
+
+    --card: 45 20% 94%;
+    --card-foreground: 220 30% 12%;
+
+    --popover: 45 25% 96%;
+    --popover-foreground: 220 30% 12%;
+
+    /* Deep forest green accent */
+    --primary: 160 25% 32%;
+    --primary-foreground: 45 25% 96%;
+
+    --secondary: 45 15% 90%;
+    --secondary-foreground: 220 30% 12%;
+
+    --muted: 45 12% 88%;
+    --muted-foreground: 220 15% 40%;
+
+    --accent: 160 25% 32%;
+    --accent-foreground: 45 25% 96%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 45 25% 96%;
+
+    --border: 45 15% 82%;
+    --input: 45 15% 82%;
+    --ring: 160 25% 32%;
+
+    --radius: 0.125rem;
+
+    /* Custom tokens for the boutique aesthetic */
+    --sage: 160 25% 32%;
+    --sage-light: 160 15% 85%;
+    --charcoal: 220 30% 12%;
+    --charcoal-light: 220 15% 40%;
+    --cream: 45 25% 96%;
+    --cream-dark: 45 15% 90%;
+    --sepia: 35 40% 85%;
+    --ink: 220 30% 8%;
+
+    /* Typography */
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
+
+    /* Spacing rhythm */
+    --space-reading: 65ch;
+
+    --sidebar-background: 45 25% 96%;
+    --sidebar-foreground: 220 30% 12%;
+    --sidebar-primary: 160 25% 32%;
+    --sidebar-primary-foreground: 45 25% 96%;
+    --sidebar-accent: 45 15% 90%;
+    --sidebar-accent-foreground: 220 30% 12%;
+    --sidebar-border: 45 15% 82%;
+    --sidebar-ring: 160 25% 32%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 45 15% 88%;
+
+    --card: 220 25% 10%;
+    --card-foreground: 45 15% 88%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 45 15% 88%;
+
+    --primary: 160 30% 50%;
+    --primary-foreground: 220 25% 8%;
+
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 45 15% 88%;
+
+    --muted: 220 20% 15%;
+    --muted-foreground: 45 10% 55%;
+
+    --accent: 160 30% 50%;
+    --accent-foreground: 220 25% 8%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 45 15% 88%;
+
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 160 30% 50%;
+
+    --sage: 160 30% 50%;
+    --sage-light: 160 15% 20%;
+    --charcoal: 45 15% 88%;
+    --charcoal-light: 45 10% 55%;
+    --cream: 220 25% 8%;
+    --cream-dark: 220 20% 12%;
+    --sepia: 35 20% 18%;
+    --ink: 45 15% 92%;
+
+    --sidebar-background: 220 25% 8%;
+    --sidebar-foreground: 45 15% 88%;
+    --sidebar-primary: 160 30% 50%;
+    --sidebar-primary-foreground: 220 25% 8%;
+    --sidebar-accent: 220 20% 15%;
+    --sidebar-accent-foreground: 45 15% 88%;
+    --sidebar-border: 220 20% 18%;
+    --sidebar-ring: 160 30% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+    position: relative;
+  }
+
+  /* Film grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* Paper texture background */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background: 
+      radial-gradient(ellipse at 20% 20%, hsl(45 30% 94% / 0.5) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, hsl(35 25% 92% / 0.5) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, hsl(45 25% 96%) 0%, hsl(40 20% 94%) 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  /* Selection styling */
+  ::selection {
+    background: hsl(var(--sage-light));
+    color: hsl(var(--charcoal));
+  }
+}
+
+@layer components {
+  /* Reading optimized container */
+  .reading-container {
+    @apply mx-auto px-6;
+    max-width: var(--space-reading);
+  }
+
+  /* Elegant link styling */
+  .link-underline {
+    @apply relative inline-block;
+    background-image: linear-gradient(hsl(var(--sage)), hsl(var(--sage)));
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease;
+  }
+
+  .link-underline:hover {
+    background-size: 100% 2px;
+  }
+
+  /* Subtle hover effect for cards */
+  .card-hover {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -15px hsl(var(--charcoal) / 0.08);
+  }
+
+  /* Progress bar styling */
+  .progress-bar {
+    @apply fixed top-0 left-0 h-[2px] z-50;
+    background: hsl(var(--sage));
+    transform-origin: left;
+  }
+
+  /* Category pill - brutalist style */
+  .category-pill {
+    @apply inline-block px-3 py-1 text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300;
+    background: transparent;
+    color: hsl(var(--charcoal-light));
+    border: 1px solid hsl(var(--border));
+  }
+
+  .category-pill:hover {
+    background: hsl(var(--sage));
+    color: hsl(var(--cream));
+    border-color: hsl(var(--sage));
+  }
+
+  /* Divider */
+  .divider {
+    @apply w-24 h-px mx-auto my-12;
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+  }
+
+  /* Masonry grid layout */
+  .masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+
+  .masonry-item-wide {
+    grid-column: span 8;
+  }
+
+  .masonry-item-narrow {
+    grid-column: span 4;
+  }
+
+  .masonry-item-full {
+    grid-column: span 12;
+  }
+
+  @media (max-width: 1024px) {
+    .masonry-item-wide,
+    .masonry-item-narrow {
+      grid-column: span 6;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .masonry-item-wide,
+    .masonry-item-narrow,
+    .masonry-item-full {
+      grid-column: span 12;
+    }
+  }
+
+  /* Image filter for abstract imagery */
+  .image-sepia {
+    filter: grayscale(40%) sepia(15%) contrast(1.05);
+    transition: filter 0.5s ease;
+  }
+
+  .image-sepia:hover {
+    filter: grayscale(20%) sepia(10%) contrast(1.1);
+  }
+
+  /* Floating widget */
+  .floating-widget {
+    @apply fixed right-8 top-1/2 -translate-y-1/2 z-40;
+    @apply hidden xl:block;
+    width: 200px;
+  }
+
+  /* Reveal animation */
+  .reveal-text {
+    clip-path: inset(0 0 100% 0);
+    animation: reveal 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  }
+
+  @keyframes reveal {
+    to {
+      clip-path: inset(0 0 0% 0);
+    }
+  }
+
+  /* Stagger reveal */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* Article body typography */
+  .article-body {
+    @apply text-lg leading-relaxed;
+  }
+
+  .article-body p {
+    @apply mb-6;
+  }
+
+  .article-body h2 {
+    @apply text-3xl mt-16 mb-6;
+  }
+
+  .article-body h3 {
+    @apply text-2xl mt-10 mb-4;
+  }
+
+  .article-body blockquote {
+    @apply pl-8 my-10 text-xl italic border-l-2;
+    border-color: hsl(var(--sage));
+    color: hsl(var(--charcoal-light));
+  }
+
+  .article-body a {
+    @apply link-underline;
+    color: hsl(var(--sage));
+  }
+
+  .article-body ul, .article-body ol {
+    @apply pl-6 mb-6 space-y-2;
+  }
+
+  .article-body li {
+    @apply relative;
+  }
+
+  .article-body ul li::before {
+    content: '—';
+    @apply absolute -left-5 text-muted-foreground;
+  }
+}

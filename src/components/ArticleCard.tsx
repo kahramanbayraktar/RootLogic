@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Article, categories, formatDate } from '@/data/articles';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Article, categories, formatDate } from '@/data/articles';
+import { Link } from 'react-router-dom';
 
 interface ArticleCardProps {
   article: Article;
@@ -39,10 +39,10 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
         className="block h-full border border-border bg-card/30 hover:bg-card/60 transition-all duration-500 overflow-hidden card-hover"
       >
         {/* Image */}
-        {article.imageUrl && (
+        {article.image_url && (
           <div className="relative overflow-hidden aspect-[16/10]">
             <motion.img
-              src={article.imageUrl}
+              src={article.image_url}
               alt=""
               className="w-full h-full object-cover image-sepia"
               initial={{ scale: 1.1 }}
@@ -61,7 +61,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, delay: staggerDelay + 0.2 }}
           >
-            {categories[article.category].label}
+            {categories[article.category as keyof typeof categories]?.label || 'Uncategorized'}
           </motion.span>
           
           {/* Title with reveal animation */}
@@ -95,7 +95,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
               {formatDate(article.date)}
             </time>
             <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
-            <span>{article.readingTime} min</span>
+            <span>{article.reading_time} min</span>
           </motion.div>
         </div>
       </Link>

@@ -1,7 +1,8 @@
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ReadingProgress from '@/components/ReadingProgress';
-import { categories, formatDate, getArticleById } from '@/data/articles';
+import { categories, fetchArticleById, formatDate } from '@/data/articles';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { Link, Navigate, useParams } from 'react-router-dom';
@@ -10,9 +11,22 @@ import ReactMarkdown from 'react-markdown';
 
 const Article = () => {
   const { id } = useParams<{ id: string }>();
-  const article = id ? getArticleById(id) : undefined;
 
-  if (!article) {
+  const { data: article, isLoading, isError } = useQuery({
+    queryKey: ['article', id],
+    queryFn: () => (id ? fetchArticleById(id) : Promise.resolve(null)),
+    enabled: !!id,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse font-serif text-2xl italic">Opening the manuscript...</div>
+      </div>
+    );
+  }
+
+  if (isError || !article) {
     return <Navigate to="/" replace />;
   }
 
@@ -49,7 +63,7 @@ const Article = () => {
           >
             {/* Category */}
             <span className="text-xs tracking-widest uppercase text-primary mb-4 block">
-              {categories[article.category].label}
+              {categories[article.category as keyof typeof categories]?.label || 'Uncategorized'}
             </span>
             
             {/* Title */}
@@ -63,7 +77,7 @@ const Article = () => {
                 {formatDate(article.date)}
               </time>
               <span className="w-1 h-1 rounded-full bg-border" />
-              <span>{article.readingTime} min read</span>
+              <span>{article.reading_time} min read</span>
             </div>
           </motion.div>
         </header>

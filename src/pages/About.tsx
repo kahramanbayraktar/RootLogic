@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import Navigation from '@/components/Navigation';
+import { motion } from 'framer-motion';
 
 const About = () => {
   return (
@@ -57,7 +57,7 @@ const About = () => {
             </p>
 
             <p>
-              <strong>Gemini Gems</strong> explore the intersections—those fertile spaces where psychology and philosophy illuminate each other, where science and wisdom converge.
+              <strong>Health Insights</strong> are practical guides to well-being, grounded in scientific research and personal experience.
             </p>
 
             <h2>An Invitation</h2>

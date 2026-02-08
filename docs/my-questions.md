@@ -60,7 +60,18 @@ const allCategories: O render anına özel hesaplanmış sabit bir "view" (gör�
 Modern kural şudur: Önce her şeye const yaz. Eğer gerçekten değeri manuel olarak değiştirmen (re-assign) gerekiyorsa o zaman let'e çevir. (Ama React'te %99 const yeterlidir).
 
 
-- **Q** dangerouslySetInnerHTML nedir?
+- **Q** dangerouslySetInnerHTML nedir? (done)
 - **A**
+    - **Nedir?:** React'te bir HTML elementinin içine doğrudan "ham HTML" (string formatında) basmak için kullanılan bir özelliktir. Tarayıcıdaki `innerHTML` özelliğinin React karşılığıdır.
+    - **Neden "Dangerous" (Tehlikeli)?:** Eğer bu metin dışarıdan (bir kullanıcıdan veya güvensiz bir API'den) geliyorsa, içine kötü amaçlı script'ler (`<script>alert('hack')</script>`) gizlenebilir. Bu da **XSS (Cross-Site Scripting)** saldırılarına yol açar.
+    - **Neden Kullanırız?:** Bazen bir CMS'den veya senin durumunda olduğu gibi legacy (eski) bir sistemden hazır HTML tag'leri içeren metinler gelir. Bunları düz yazı olarak değil, HTML olarak göstermek zorunda kalırsın. 
+    - **Modern Alternatif:** Bizim yaptığımız gibi **Markdown** kullanmak ve `react-markdown` gibi bir kütüphaneyle render etmek çok daha güvenlidir çünkü bu kütüphaneler tehlikeli tag'leri otomatik olarak temizler.
 
-- **Q** vite nedir? ne için kullanılır?
+- **Q** vite nedir? ne için kullanılır? (done)
+- **A**
+    - **Tanım:** Vite (Fransızca "hızlı" demek), modern web projeleri için geliştirilmiş yeni nesil bir **Build Tool** (İnşa Aracı) ve **Development Server**'dır (Geliştirme Sunucusu).
+    - **Ne İşe Yarar?:**
+        1. **Hız:** Eski araçlara (Webpack gibi) göre çok daha hızlı çalışır. Sen bir dosyayı kaydedip tarayıcıda değişikliği gördüğün o "HMR" (Hot Module Replacement) işlemi Vite ile neredeyse anlıktır.
+        2. **Modülerlik:** Tarayıcının modern "ES Modules" özelliğini kullanır. Yani sadece üzerinde çalıştığın dosyayı derler, tüm projeyi en baştan paketlemekle uğraşmaz.
+        3. **Hazır Ayarlar:** TypeScript, CSS (Tailwind/PostCSS) ve JSX gibi teknolojilerin konfigürasyonunu senin yerine "out-of-the-box" (hazır) olarak sunar.
+    - **Özet:** Projeni geliştirirken sana süper hızlı bir ortam sunan, yayına alırken de kodunu optimize edip küçülten (bundle) bir "orkestra şefidir".

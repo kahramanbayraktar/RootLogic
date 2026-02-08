@@ -3,7 +3,8 @@ import CategoryFilter from '@/components/CategoryFilter';
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ThoughtOfTheDay from '@/components/ThoughtOfTheDay';
-import { articles, categories } from '@/data/articles';
+import { categories, fetchArticles } from '@/data/articles';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 
@@ -12,10 +13,23 @@ type CategoryKey = keyof typeof categories | 'all';
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('all');
 
+  const { data: articles = [], isLoading, isError } = useQuery({
+    queryKey: ['articles'],
+    queryFn: fetchArticles,
+  });
+
   const filteredArticles = useMemo(() => {
     if (activeCategory === 'all') return articles;
     return articles.filter(article => article.category === activeCategory);
-  }, [activeCategory]);
+  }, [activeCategory, articles]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse font-serif text-2xl italic">Loading library...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">
@@ -55,7 +69,7 @@ const Index = () => {
               className="text-center py-20"
             >
               <p className="text-muted-foreground font-serif text-xl italic">
-                No articles found in this category.
+                {isError ? 'Error loading articles. Please check your connection.' : 'No articles found in this category.'}
               </p>
             </motion.div>
           )}

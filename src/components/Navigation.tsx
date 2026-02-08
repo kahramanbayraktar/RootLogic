@@ -1,7 +1,8 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, Search, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, X, Menu } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Navigation = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -30,38 +31,47 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-10">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`text-[11px] font-medium tracking-[0.15em] uppercase transition-colors duration-300 ${
-                  isActive(item.path) 
-                    ? 'text-foreground' 
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex items-center gap-6 mr-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`text-[11px] font-medium tracking-[0.15em] uppercase transition-colors duration-300 ${
+                    isActive(item.path) 
+                      ? 'text-foreground' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
             
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="text-muted-foreground hover:text-foreground transition-colors duration-300 p-2 -m-2"
-              aria-label="Open search"
-            >
-              <Search size={16} strokeWidth={1.5} />
-            </button>
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-300 p-2"
+                aria-label="Open search"
+              >
+                <Search size={18} strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-muted-foreground hover:text-foreground transition-colors duration-300"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="flex items-center gap-4 md:hidden">
+            <LanguageSwitcher />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -128,6 +138,7 @@ const Navigation = () => {
                 />
                 <button
                   onClick={() => {
+                    setIsSearchOpen(false);
                     setIsSearchOpen(false);
                     setSearchQuery('');
                   }}

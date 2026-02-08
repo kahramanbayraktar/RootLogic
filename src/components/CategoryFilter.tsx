@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
 import { categories } from '@/data/articles';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 type CategoryKey = keyof typeof categories | 'all';
 
@@ -9,11 +10,13 @@ interface CategoryFilterProps {
 }
 
 const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProps) => {
+  const {t} = useTranslation();
+  
   const allCategories: { key: CategoryKey; label: string }[] = [
     { key: 'all', label: 'All' },
     ...Object.entries(categories).map(([key, value]) => ({
       key: key as CategoryKey,
-      label: value.label,
+      label: t(value.label),
     })),
   ];
 

@@ -12,9 +12,9 @@ export interface Article {
 }
 
 export const categories = {
-  psychology: { label: 'Psychology Analyses', slug: 'psychology' },
-  philosophy: { label: 'Philosophical Inquiries', slug: 'philosophy' },
-  gemini: { label: 'Gemini Gems', slug: 'gemini' },
+  psychology: { label: 'cat_psychology_analyses', slug: 'psychology' },
+  philosophy: { label: 'cat_philosophical_inquiries', slug: 'philosophy' },
+  gemini: { label: 'cat_gemini_gems', slug: 'gemini' },
 } as const;
 
 export const articles: Article[] = [

@@ -1,10 +1,12 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ReadingProgress from '@/components/ReadingProgress';
-import Footer from '@/components/Footer';
-import { getArticleById, categories, formatDate } from '@/data/articles';
+import { categories, formatDate, getArticleById } from '@/data/articles';
+import { motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+
+import ReactMarkdown from 'react-markdown';
 
 const Article = () => {
   const { id } = useParams<{ id: string }>();
@@ -76,10 +78,9 @@ const Article = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="reading-container"
         >
-          <div 
-            className="article-body"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          <div className="article-body">
+            <ReactMarkdown>{article.content}</ReactMarkdown>
+          </div>
         </motion.article>
 
         {/* Author */}

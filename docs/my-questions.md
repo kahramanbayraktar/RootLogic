@@ -58,3 +58,9 @@ const CategoryFilter: Bileşenin kendisidir. Bir bileşeni başka bir şeye dön
 const { t }: Bir "hook"tan gelen sabittir.
 const allCategories: O render anına özel hesaplanmış sabit bir "view" (görünüm) verisidir.
 Modern kural şudur: Önce her şeye const yaz. Eğer gerçekten değeri manuel olarak değiştirmen (re-assign) gerekiyorsa o zaman let'e çevir. (Ama React'te %99 const yeterlidir).
+
+
+- **Q** dangerouslySetInnerHTML nedir?
+- **A**
+
+- **Q** vite nedir? ne için kullanılır?

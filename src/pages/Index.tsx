@@ -7,10 +7,12 @@ import { categories, fetchArticles } from '@/data/articles';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type CategoryKey = keyof typeof categories | 'all';
 
 const Index = () => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('all');
 
   const { data: articles = [], isLoading, isError } = useQuery({
@@ -26,7 +28,7 @@ const Index = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse font-serif text-2xl italic">Loading library...</div>
+        <div className="animate-pulse font-serif text-2xl italic">{t('loading_library')}</div>
       </div>
     );
   }
@@ -69,7 +71,7 @@ const Index = () => {
               className="text-center py-20"
             >
               <p className="text-muted-foreground font-serif text-xl italic">
-                {isError ? 'Error loading articles. Please check your connection.' : 'No articles found in this category.'}
+                {isError ? t('error_loading_articles') : t('no_articles_found')}
               </p>
             </motion.div>
           )}

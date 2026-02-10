@@ -1,11 +1,22 @@
 {
     "welcome": "RootLogic'e Hoş Geldiniz",
     "language": "Dil",
-    "cat_psychology_analyses": "Psikoloji Analizleri",
-    "cat_philosophical_inquiries": "Felsefi Sorgulamalar",
+    "cat_psychology": "Psikoloji",
+    "cat_philosophy": "Felsefe",
     "cat_health": "Sağlık",
     "all": "Tümü",
-    "nav_library": "Kitaplık",
-    "nav_about": "Hakkında",
-    "thought_of_the_day": "Günün Düşüncesi"
+    "thought_of_the_day": "Günün Düşüncesi",
+    "read_time": "{{count}} dk okuma",
+    "back_to_articles": "Yazılara Dön",
+    "edit_article": "Yazı Düzenle",
+    "footer_tagline": "Psikoloji, felsefe ve sağlık konularında bütünü kavramaya yönelik, herkesin anlayabileceği sadelikte içerikler.",
+    "loading_articles": "Yazılar yükleniyor...",
+    "opening_article": "Yazı açılıyor...",
+    "no_articles_found": "Bu kategoride yazı bulunamadı.",
+    "search_placeholder": "Yazılar arasında ara...",
+    "search_hint": "Arama yapmak için yazın",
+    "search_press_enter": "Aramak için enter'a basın",
+    "not_found_title": "Sayfa Bulunamadı",
+    "not_found_text": "Aradığınız sayfa düşüncelerin derinliklerinde kaybolmuş olabilir.",
+    "error_loading_articles": "Yazılar yüklenirken hata oluştu. Lütfen bağlantınızı kontrol edin."
 }

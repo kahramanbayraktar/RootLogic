@@ -64,7 +64,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, delay: staggerDelay + 0.2 }}
           >
-            {toUpper(t(categories[article.category as keyof typeof categories]?.label || 'Uncategorized'), i18n.language)}
+            {toUpper(t(categories[article.category]?.label || 'Uncategorized'), i18n.language)}
           </motion.span>
           
           {/* Title with reveal animation */}
@@ -95,10 +95,10 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
             transition={{ duration: 0.5, delay: staggerDelay + 0.5 }}
           >
             <time dateTime={article.date}>
-              {formatDate(article.date)}
+              {formatDate(article.date, i18n.language)}
             </time>
             <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
-            <span>{article.reading_time} min</span>
+            <span>{t('read_time', { count: article.reading_time })}</span>
           </motion.div>
         </div>
       </Link>

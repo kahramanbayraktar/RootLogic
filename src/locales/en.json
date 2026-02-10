@@ -1,11 +1,22 @@
 {
     "welcome": "Welcome to RootLogic",
     "language": "Language",
-    "cat_psychology_analyses": "Psychology Analyses",
-    "cat_philosophical_inquiries": "Philosophical Inquiries",
-    "cat_health": "Health Insights",
+    "cat_psychology": "Psychology",
+    "cat_philosophy": "Philosophy",
+    "cat_health": "Health",
     "all": "All",
-    "nav_library": "Library",
-    "nav_about": "About",
-    "thought_of_the_day": "Thought of the Day"
+    "thought_of_the_day": "Thought of the Day",
+    "read_time": "{{count}} min read",
+    "back_to_articles": "Back to Articles",
+    "edit_article": "Edit Article",
+    "footer_tagline": "Content on psychology, philosophy, and health topics that aims to grasp the whole picture, presented in a simplicity that everyone can understand.",
+    "loading_articles": "Loading articles...",
+    "opening_article": "Opening the article...",
+    "no_articles_found": "No articles found in this category.",
+    "search_placeholder": "Search articles...",
+    "search_hint": "Type to search articles",
+    "search_press_enter": "Press enter to search",
+    "not_found_title": "Page Not Found",
+    "not_found_text": "The page you are looking for has vanished into the depths of thought.",
+    "error_loading_articles": "Error loading articles. Please check your connection."
 }

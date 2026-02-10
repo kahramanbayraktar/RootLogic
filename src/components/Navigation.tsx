@@ -1,24 +1,14 @@
-import { toUpper } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const Navigation = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const location = useLocation();
-
-  const navItems = [
-    { label: t('nav_library'), path: '/' },
-    { label: t('nav_about'), path: '/about' },
-  ];
-
-  const isActive = (path: string) => location.pathname === path;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border/50">
@@ -35,22 +25,6 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-6 mr-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`text-[11px] font-medium tracking-[0.15em] uppercase transition-colors duration-300 ${
-                    isActive(item.path) 
-                      ? 'text-foreground' 
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {toUpper(item.label, i18n.language)}
-                </Link>
-              ))}
-            </div>
-            
             <div className="flex items-center gap-2">
               <LanguageSwitcher />
               
@@ -68,54 +42,14 @@ const Navigation = () => {
           <div className="flex items-center gap-4 md:hidden">
             <LanguageSwitcher />
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setIsSearchOpen(true)}
               className="text-muted-foreground hover:text-foreground transition-colors duration-300"
-              aria-label="Toggle menu"
+              aria-label="Open search"
             >
-              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              <Search size={20} />
             </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="md:hidden mt-6 pb-4 border-b border-border"
-            >
-              <div className="flex flex-col gap-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-sm tracking-wide transition-colors duration-300 ${
-                      isActive(item.path) 
-                        ? 'text-foreground' 
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    setIsSearchOpen(true);
-                  }}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
-                >
-                  <Search size={16} />
-                  Search
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </nav>
 
       {/* Search Modal */}

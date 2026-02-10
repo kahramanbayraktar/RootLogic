@@ -20,3 +20,9 @@ CREATE POLICY "Public profiles are viewable by everyone." ON articles FOR SELECT
 
 -- Makale ekleme izni (Development için herkese açık)
 CREATE POLICY "Anyone can insert articles." ON articles FOR INSERT WITH CHECK (true);
+
+-- Makale güncelleme izni
+CREATE POLICY "Anyone can update articles." ON articles FOR UPDATE USING (true);
+
+-- Makale silme izni
+CREATE POLICY "Anyone can delete articles." ON articles FOR DELETE USING (true);

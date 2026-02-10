@@ -14,8 +14,8 @@ export interface Article {
 }
 
 export const categories = {
-  psychology: { label: 'cat_psychology_analyses', slug: 'psychology' },
-  philosophy: { label: 'cat_philosophical_inquiries', slug: 'philosophy' },
+  psychology: { label: 'cat_psychology', slug: 'psychology' },
+  philosophy: { label: 'cat_philosophy', slug: 'philosophy' },
   health: { label: 'cat_health', slug: 'health' },
 } as const;
 
@@ -63,9 +63,39 @@ export async function createArticle(article: Article): Promise<Article | null> {
   return data as Article;
 }
 
-export function formatDate(dateString: string): string {
+export async function updateArticle(id: string, article: Partial<Article>): Promise<Article | null> {
+  const { data, error } = await supabase
+    .from('articles')
+    .update(article)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating article:', error);
+    return null;
+  }
+
+  return data as Article;
+}
+
+export async function deleteArticle(id: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('articles')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting article:', error);
+    return false;
+  }
+
+  return true;
+}
+
+export function formatDate(dateString: string, locale: string = 'en-US'): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { 
+  return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-US', { 
     year: 'numeric', 
     month: 'long', 
     day: 'numeric' 

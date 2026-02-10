@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -20,7 +22,7 @@ const Footer = () => {
           
           {/* Tagline */}
           <p className="text-sm text-muted-foreground max-w-md">
-            Exploring the depths of mind and meaning through psychology and philosophy.
+            {t('footer_tagline')}
           </p>
           
           {/* Divider */}
@@ -28,7 +30,7 @@ const Footer = () => {
           
           {/* Copyright */}
           <p className="text-xs text-muted-foreground">
-            © {currentYear} The Root Logic. All rights reserved.
+            © {currentYear} The Root Logic.
           </p>
         </div>
       </div>

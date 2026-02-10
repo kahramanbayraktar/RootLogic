@@ -1,4 +1,6 @@
 import { categories } from '@/data/articles';
+import i18n from '@/i18n';
+import { toUpper } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
@@ -13,10 +15,10 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProp
   const {t} = useTranslation();
   
   const allCategories: { key: CategoryKey; label: string }[] = [
-    { key: 'all', label: t('all') },
+    { key: 'all', label: toUpper(t('all'), i18n.language) },
     ...Object.entries(categories).map(([key, value]) => ({
       key: key as CategoryKey,
-      label: t(value.label),
+      label: toUpper(t(value.label), i18n.language),
     })),
   ];
 
@@ -31,7 +33,7 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProp
         <button
           key={key}
           onClick={() => onCategoryChange(key)}
-          className={`px-4 py-2 text-sm tracking-wide transition-all duration-300 rounded-sm ${
+          className={`px-4 py-2 text-xs tracking-wide transition-all duration-300 rounded-sm ${
             activeCategory === key
               ? 'bg-foreground text-background'
               : 'text-muted-foreground hover:text-foreground hover:bg-secondary'

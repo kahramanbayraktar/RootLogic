@@ -55,7 +55,7 @@
     --font-sans: 'Inter', system-ui, sans-serif;
 
     /* Spacing rhythm */
-    --space-reading: 65ch;
+    --space-reading: 80ch;
 
     --sidebar-background: 45 25% 96%;
     --sidebar-foreground: 220 30% 12%;

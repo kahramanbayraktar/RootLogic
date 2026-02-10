@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 export interface Article {
   id: string;
   title: string;
+  subtitle?: string;
   teaser: string;
   content: string;
   category: 'psychology' | 'philosophy' | 'health';
@@ -100,4 +101,51 @@ export function formatDate(dateString: string, locale: string = 'en-US'): string
     month: 'long', 
     day: 'numeric' 
   });
+}
+
+export async function uploadImageFromUrl(url: string, fileName: string): Promise<string | null> {
+  try {
+    let finalUrl = url;
+    
+    // Google images (lh3.googleusercontent.com, etc.) often block direct fetch due to CORS
+    if (url.includes('googleusercontent.com') || url.includes('google.com')) {
+      console.log('Detected Google-hosted image, using CORS proxy...');
+      finalUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    }
+
+    console.log('Fetching image from:', finalUrl);
+    const response = await fetch(finalUrl);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.statusText} (${response.status})`);
+    }
+    
+    const blob = await response.blob();
+    const contentType = blob.type || 'image/webp';
+    const fileExt = contentType.split('/')[1] || 'webp';
+    const filePath = `${Date.now()}-${fileName}.${fileExt}`;
+
+    console.log(`Uploading ${filePath} to Supabase storage...`);
+    const { data, error: uploadError } = await supabase.storage
+      .from('article-images')
+      .upload(filePath, blob, {
+        contentType: contentType,
+        upsert: true
+      });
+
+    if (uploadError) {
+      console.error('Supabase Storage Error:', uploadError);
+      return null;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('article-images')
+      .getPublicUrl(filePath);
+
+    console.log('Upload successful. Managed URL:', publicUrl);
+    return publicUrl;
+  } catch (error) {
+    console.error('Image processing failed:', error);
+    return null;
+  }
 }

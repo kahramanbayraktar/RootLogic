@@ -69,13 +69,25 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
           
           {/* Title with reveal animation */}
           <motion.h2 
-            className="font-serif text-2xl md:text-3xl lg:text-4xl leading-[1.1] tracking-tight mb-4 group-hover:text-primary transition-colors duration-500"
+            className="font-serif text-2xl md:text-3xl lg:text-4xl leading-[1.1] tracking-tight mb-2 group-hover:text-primary transition-colors duration-500"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: staggerDelay + 0.3 }}
           >
             {article.title}
           </motion.h2>
+
+          {/* Subtitle */}
+          {article.subtitle && (
+            <motion.p 
+              className="font-serif text-lg text-muted-foreground italic mb-4 leading-tight"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: staggerDelay + 0.35 }}
+            >
+              {article.subtitle}
+            </motion.p>
+          )}
           
           {/* Teaser with reveal */}
           <motion.p 

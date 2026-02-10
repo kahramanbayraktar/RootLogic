@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,300;0,400;0,700;0,800;1,400&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amarante:ital,wght@0,300;0,400;0,700;0,800;1,400&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -51,7 +51,7 @@
     --ink: 220 30% 8%;
 
     /* Typography Defaults */
-    --font-serif: 'Georama', sans-serif;
+    --font-serif: 'Amarante', sans-serif;
     --font-serif-weight: 500;
     --font-serif-size: 1.25;
     --font-sans: 'Newsreader', serif;

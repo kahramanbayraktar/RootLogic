@@ -84,18 +84,41 @@ const Article = () => {
             </span>
             
             {/* Title */}
-            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
               {article.title}
             </h1>
+
+            {/* Subtitle */}
+            {article.subtitle && (
+              <p className="font-serif text-xl md:text-2xl text-muted-foreground italic mb-6 max-w-2xl mx-auto leading-relaxed">
+                {article.subtitle}
+              </p>
+            )}
             
             {/* Meta */}
-            <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-12">
               <time dateTime={article.date}>
                 {formatDate(article.date, i18n.language)}
               </time>
               <span className="w-1 h-1 rounded-full bg-border" />
               <span>{t('read_time', { count: article.reading_time })}</span>
             </div>
+
+            {/* Feature Image */}
+            {article.image_url && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7 }}
+                className="w-full aspect-video rounded-lg overflow-hidden mb-12 border border-border/50"
+              >
+                <img 
+                  src={article.image_url} 
+                  alt={article.title} 
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            )}
           </motion.div>
         </header>
 

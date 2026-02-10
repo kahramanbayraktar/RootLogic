@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
+import Logo from './Logo';
 
 const Navigation = () => {
   const { t } = useTranslation();
@@ -17,10 +18,13 @@ const Navigation = () => {
           {/* Logo */}
           <Link 
             to="/" 
-            className="font-serif text-2xl tracking-[-0.03em] hover:text-primary transition-colors duration-300"
+            className="flex items-center gap-4 group transition-all duration-300"
           >
-            <span className="font-semibold">ROOT</span>
-            <span className="italic font-normal ml-1">LOGIC</span>
+            <Logo className="w-16 h-8 text-foreground group-hover:text-primary transition-colors duration-500" />
+            <div className="font-serif text-2xl tracking-[-0.03em] flex flex-col md:flex-row md:items-baseline">
+              <span className="font-semibold">ROOT</span>
+              <span className="italic font-normal md:ml-1 opacity-70 group-hover:opacity-100 transition-opacity">LOGIC</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

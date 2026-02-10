@@ -2,27 +2,29 @@ import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Article, createArticle } from '@/data/articles';
+import { Article, createArticle, uploadImageFromUrl } from '@/data/articles';
+import { generateImageWithGemini } from '@/lib/gemini';
 import { slugify } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +35,7 @@ import * as z from 'zod';
 const articleSchema = z.object({
   id: z.string().min(3, 'Slug must be at least 3 characters'),
   title: z.string().min(5, 'Title must be at least 5 characters'),
+  subtitle: z.string().optional(),
   teaser: z.string().min(10, 'Teaser must be at least 10 characters'),
   content: z.string().min(20, 'Content must be at least 20 characters'),
   category: z.enum(['psychology', 'philosophy', 'health']),
@@ -53,6 +56,7 @@ const CreateArticle = () => {
     defaultValues: {
       id: '',
       title: '',
+      subtitle: '',
       teaser: '',
       content: '',
       category: 'psychology',
@@ -65,6 +69,39 @@ const CreateArticle = () => {
   });
 
   const title = form.watch('title');
+  const subtitle = form.watch('subtitle');
+
+  const generateAIImage = async () => {
+    if (!title) {
+       toast.error('Please enter a title first');
+       return;
+    }
+    
+    // Using default model from env or fallback
+    const toastId = toast.loading('Generating image with AI...');
+    
+    // Improved prompt to focus on visual concepts and avoid text rendering
+    const prompt = `A conceptual art piece reflecting the themes of "${title}"${subtitle ? ' and "' + subtitle + '"' : ''}. Minimalist, abstract, 4k resolution, cinematic lighting, editorial style. NO TEXT, NO LETTERS, NO WATERMARKS, NO TYPOGRAPHY. The image should be completely void of any written words.`;
+
+    try {
+      const result = await generateImageWithGemini(prompt);
+      
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      
+      if (result.url) {
+        form.setValue('image_url', result.url, { shouldValidate: true });
+        toast.success('Image generated (URL)', { id: toastId });
+      } else if (result.base64) {
+        form.setValue('image_url', result.base64, { shouldValidate: true });
+        toast.success('Image generated (Base64)', { id: toastId });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('AI generation failed. Check API Key.', { id: toastId });
+    }
+  };
 
   useEffect(() => {
     if (title) {
@@ -75,10 +112,21 @@ const CreateArticle = () => {
   async function onSubmit(values: z.infer<typeof articleSchema>) {
     setIsSubmitting(true);
     try {
+      let finalImageUrl = values.image_url;
+
+      // If it's an external URL (pollinations, unsplash, etc.), upload to Supabase Storage
+      if (values.image_url && !values.image_url.includes('supabase.co')) {
+        toast.info('Uploading image to permanent storage...');
+        const uploadedUrl = await uploadImageFromUrl(values.image_url, values.id);
+        if (uploadedUrl) {
+          finalImageUrl = uploadedUrl;
+        }
+      }
+
       const articleData: Article = {
         ...values,
-        id: values.id, // Ensure id is present
-        image_url: values.image_url || undefined,
+        id: values.id,
+        image_url: finalImageUrl || undefined,
       } as Article;
 
       const result = await createArticle(articleData);
@@ -121,6 +169,20 @@ const CreateArticle = () => {
                         <FormLabel>Title</FormLabel>
                         <FormControl>
                           <Input placeholder="The Hidden Rhythms of Thought" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="subtitle"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Subtitle (Optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Exploring the deep connection between mind and matter" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -206,7 +268,18 @@ const CreateArticle = () => {
                     name="image_url"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>Image URL (Optional)</FormLabel>
+                        <FormLabel className="flex justify-between items-center">
+                          Image URL (Optional)
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={generateAIImage}
+                            className="h-7 text-[10px] gap-1 px-2 border border-primary/20 hover:bg-primary/10 transition-colors"
+                          >
+                            <Sparkles size={12} className="text-primary" /> Generate with AI
+                          </Button>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="https://unsplash.com/photos/..." {...field} />
                         </FormControl>

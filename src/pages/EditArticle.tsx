@@ -19,11 +19,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Article, deleteArticle, fetchArticleById, updateArticle } from '@/data/articles';
+import { Article, deleteArticle, fetchArticleById, updateArticle, uploadImageFromUrl } from '@/data/articles';
+import { generateImageWithGemini } from '@/lib/gemini';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Trash2 } from 'lucide-react';
+import { Sparkles, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +35,7 @@ import * as z from 'zod';
 const articleSchema = z.object({
   id: z.string().min(3, 'Slug must be at least 3 characters'),
   title: z.string().min(5, 'Title must be at least 5 characters'),
+  subtitle: z.string().optional(),
   teaser: z.string().min(10, 'Teaser must be at least 10 characters'),
   content: z.string().min(20, 'Content must be at least 20 characters'),
   category: z.enum(['psychology', 'philosophy', 'health']),
@@ -62,6 +64,7 @@ const EditArticle = () => {
     defaultValues: {
       id: '',
       title: '',
+      subtitle: '',
       teaser: '',
       content: '',
       category: 'psychology',
@@ -73,11 +76,46 @@ const EditArticle = () => {
     },
   });
 
+  const title = form.watch('title');
+  const subtitle = form.watch('subtitle');
+
+  const generateAIImage = async () => {
+    if (!title) {
+       toast.error('Please enter a title first');
+       return;
+    }
+    
+    // Using default model from env or fallback
+    const toastId = toast.loading('Generating image with AI...');
+    try {
+       // Improved prompt to focus on visual concepts and avoid text rendering
+       const prompt = `A conceptual art piece reflecting the themes of "${title}"${subtitle ? ' and "' + subtitle + '"' : ''}. Minimalist, abstract, 4k resolution, cinematic lighting, editorial style. NO TEXT, NO LETTERS, NO WATERMARKS, NO TYPOGRAPHY. The image should be completely void of any written words.`;
+       
+       const result = await generateImageWithGemini(prompt);
+      
+       if (result.error) {
+         throw new Error(result.error);
+       }
+       
+       if (result.url) {
+         form.setValue('image_url', result.url, { shouldValidate: true });
+         toast.success('Image generated (URL)', { id: toastId });
+       } else if (result.base64) {
+         form.setValue('image_url', result.base64, { shouldValidate: true });
+         toast.success('Image generated (Base64)', { id: toastId });
+       }
+    } catch (error) {
+       console.error(error);
+       toast.error('AI generation failed. Check API Key.', { id: toastId });
+    }
+  };
+
   useEffect(() => {
     if (article) {
       form.reset({
         id: article.id,
         title: article.title,
+        subtitle: article.subtitle || '',
         teaser: article.teaser,
         content: article.content,
         category: article.category,
@@ -94,15 +132,27 @@ const EditArticle = () => {
     if (!id) return;
     setIsSubmitting(true);
     try {
+      let finalImageUrl = values.image_url;
+
+      // If it's an external URL (pollinations, unsplash, etc.), upload to Supabase Storage
+      if (values.image_url && !values.image_url.includes('supabase.co')) {
+        toast.info('Uploading image to permanent storage...');
+        const uploadedUrl = await uploadImageFromUrl(values.image_url, id);
+        if (uploadedUrl) {
+          finalImageUrl = uploadedUrl;
+        }
+      }
+
       const articleData: Partial<Article> = {
         title: values.title,
+        subtitle: values.subtitle,
         teaser: values.teaser,
         content: values.content,
         category: values.category,
         date: values.date,
         reading_time: values.reading_time,
         author: values.author,
-        image_url: values.image_url || undefined,
+        image_url: finalImageUrl || undefined,
         layout: values.layout,
       };
 
@@ -202,6 +252,20 @@ const EditArticle = () => {
 
                   <FormField
                     control={form.control}
+                    name="subtitle"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>Subtitle (Optional)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Exploring the deep connection between mind and matter" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
                     name="id"
                     render={({ field }) => (
                       <FormItem>
@@ -277,7 +341,18 @@ const EditArticle = () => {
                     name="image_url"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>Image URL (Optional)</FormLabel>
+                        <FormLabel className="flex justify-between items-center">
+                          Image URL (Optional)
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={generateAIImage}
+                            className="h-7 text-[10px] gap-1 px-2 border border-primary/20 hover:bg-primary/10 transition-colors"
+                          >
+                            <Sparkles size={12} className="text-primary" /> Generate with AI
+                          </Button>
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="https://unsplash.com/photos/..." {...field} />
                         </FormControl>

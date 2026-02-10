@@ -19,8 +19,8 @@ const Navigation = () => {
             to="/" 
             className="font-serif text-2xl tracking-[-0.03em] hover:text-primary transition-colors duration-300"
           >
-            <span className="font-semibold">Root</span>
-            <span className="italic font-normal ml-1">Logic</span>
+            <span className="font-semibold">ROOT</span>
+            <span className="italic font-normal ml-1">LOGIC</span>
           </Link>
 
           {/* Desktop Navigation */}

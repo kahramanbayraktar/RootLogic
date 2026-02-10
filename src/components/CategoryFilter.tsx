@@ -33,7 +33,7 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProp
         <button
           key={key}
           onClick={() => onCategoryChange(key)}
-          className={`px-4 py-2 text-xs tracking-wide transition-all duration-300 rounded-sm ${
+          className={`filter-button px-4 py-2 transition-all duration-300 rounded-sm ${
             activeCategory === key
               ? 'bg-foreground text-background'
               : 'text-muted-foreground hover:text-foreground hover:bg-secondary'

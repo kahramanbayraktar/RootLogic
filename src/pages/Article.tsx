@@ -51,7 +51,7 @@ const Article = () => {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
             >
               <ArrowLeft size={16} />
-              {t('back_to_library')}
+              {t('back_to_articles')}
             </Link>
           </motion.div>
 
@@ -65,7 +65,7 @@ const Article = () => {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
             >
               <Pencil size={15} />
-              {t('edit_manuscript')}
+              {t('edit_article')}
             </Link>
           </motion.div>
         </div>

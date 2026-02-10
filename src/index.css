@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap&subset=latin,latin-ext');
+@import url('https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,300;0,400;0,700;0,800;1,400&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -50,9 +50,16 @@
     --sepia: 35 40% 85%;
     --ink: 220 30% 8%;
 
-    /* Typography */
-    --font-serif: 'Cormorant Garamond', Georgia, serif;
-    --font-sans: 'Inter', system-ui, sans-serif;
+    /* Typography Defaults */
+    --font-serif: 'Georama', sans-serif;
+    --font-serif-weight: 500;
+    --font-serif-size: 1.5;
+    --font-sans: 'Newsreader', serif;
+    --font-sans-size: 1.1; 
+    --font-ui: 'Georama', sans-serif;
+    --font-ui-weight: 600;
+    --font-ui-size: 0.9;
+    --font-ui-spacing: 0.1em;
 
     /* Spacing rhythm */
     --space-reading: 80ch;
@@ -134,6 +141,23 @@
     position: relative;
   }
 
+  /* Independent Body Scaling */
+  p, li, article section, .text-content, button, input {
+    font-size: calc(1em * var(--font-sans-size, 1)) !important;
+  }
+
+  /* UI Labels & Navigation */
+  .ui-label, 
+  nav a, 
+  .category-badge, 
+  .filter-button {
+    font-family: var(--font-ui) !important;
+    font-weight: var(--font-ui-weight, 500) !important;
+    font-size: calc(1em * var(--font-ui-size, 1)) !important;
+    letter-spacing: var(--font-ui-spacing, 0.05em) !important;
+    text-transform: uppercase;
+  }
+
   /* Film grain texture overlay */
   body::before {
     content: '';
@@ -166,7 +190,8 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
-    font-weight: 600;
+    font-weight: var(--font-serif-weight, 600);
+    font-size: calc(1em * var(--font-serif-size, 1)) !important;
     line-height: 1.15;
     letter-spacing: -0.03em;
   }
@@ -182,7 +207,7 @@
   /* Reading optimized container */
   .reading-container {
     @apply mx-auto px-6;
-    max-width: var(--space-reading);
+    max-width: 52rem;
   }
 
   /* Elegant link styling */

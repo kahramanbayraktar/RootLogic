@@ -1,18 +1,21 @@
+import { toUpper } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, Search, X } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
 
 const Navigation = () => {
+  const { t, i18n } = useTranslation();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
   const navItems = [
-    { label: 'Library', path: '/' },
-    { label: 'About', path: '/about' },
+    { label: t('nav_library'), path: '/' },
+    { label: t('nav_about'), path: '/about' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -43,7 +46,7 @@ const Navigation = () => {
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  {item.label}
+                  {toUpper(item.label, i18n.language)}
                 </Link>
               ))}
             </div>

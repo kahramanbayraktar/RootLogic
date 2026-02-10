@@ -1,4 +1,6 @@
+import { toUpper } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const thoughts = [
   {
@@ -24,6 +26,7 @@ const thoughts = [
 ];
 
 const ThoughtOfTheDay = () => {
+  const { t, i18n } = useTranslation();
   // Get a thought based on the day of year for consistency
   const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
   const thought = thoughts[dayOfYear % thoughts.length];
@@ -37,7 +40,7 @@ const ThoughtOfTheDay = () => {
     >
       <div className="p-6 border border-border bg-card/50 backdrop-blur-sm">
         <span className="block text-[10px] font-semibold tracking-[0.25em] uppercase text-muted-foreground mb-4">
-          Thought of the Day
+          {toUpper(t('thought_of_the_day'), i18n.language)}
         </span>
         <blockquote className="font-serif text-lg leading-snug tracking-tight text-foreground mb-3 italic">
           "{thought.quote}"

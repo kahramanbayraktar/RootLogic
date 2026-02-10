@@ -1,6 +1,8 @@
 import { Article, categories, formatDate } from '@/data/articles';
+import { toUpper } from '@/lib/utils';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 interface ArticleCardProps {
@@ -9,6 +11,7 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({ article, index }: ArticleCardProps) => {
+  const { t, i18n } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -61,7 +64,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, delay: staggerDelay + 0.2 }}
           >
-            {categories[article.category as keyof typeof categories]?.label || 'Uncategorized'}
+            {toUpper(t(categories[article.category as keyof typeof categories]?.label || 'Uncategorized'), i18n.language)}
           </motion.span>
           
           {/* Title with reveal animation */}

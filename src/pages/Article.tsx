@@ -2,14 +2,17 @@ import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ReadingProgress from '@/components/ReadingProgress';
 import { categories, fetchArticleById, formatDate } from '@/data/articles';
+import { toUpper } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useParams } from 'react-router-dom';
 
 import ReactMarkdown from 'react-markdown';
 
 const Article = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
 
   const { data: article, isLoading, isError } = useQuery({
@@ -63,7 +66,7 @@ const Article = () => {
           >
             {/* Category */}
             <span className="text-xs tracking-widest uppercase text-primary mb-4 block">
-              {categories[article.category as keyof typeof categories]?.label || 'Uncategorized'}
+              {toUpper(t(categories[article.category as keyof typeof categories]?.label || 'Uncategorized'), i18n.language)}
             </span>
             
             {/* Title */}

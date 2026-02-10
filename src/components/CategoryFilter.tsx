@@ -13,7 +13,7 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProp
   const {t} = useTranslation();
   
   const allCategories: { key: CategoryKey; label: string }[] = [
-    { key: 'all', label: 'All' },
+    { key: 'all', label: t('all') },
     ...Object.entries(categories).map(([key, value]) => ({
       key: key as CategoryKey,
       label: t(value.label),

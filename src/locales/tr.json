@@ -3,5 +3,9 @@
     "language": "Dil",
     "cat_psychology_analyses": "Psikoloji Analizleri",
     "cat_philosophical_inquiries": "Felsefi Sorgulamalar",
-    "cat_health": "Sağlık"
+    "cat_health": "Sağlık",
+    "all": "Tümü",
+    "nav_library": "Kitaplık",
+    "nav_about": "Hakkında",
+    "thought_of_the_day": "Günün Düşüncesi"
 }

@@ -3,5 +3,9 @@
     "language": "Language",
     "cat_psychology_analyses": "Psychology Analyses",
     "cat_philosophical_inquiries": "Philosophical Inquiries",
-    "cat_health": "Health Insights"
+    "cat_health": "Health Insights",
+    "all": "All",
+    "nav_library": "Library",
+    "nav_about": "About",
+    "thought_of_the_day": "Thought of the Day"
 }

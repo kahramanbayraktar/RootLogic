@@ -20,9 +20,10 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Article, createArticle } from '@/data/articles';
+import { slugify } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -62,6 +63,14 @@ const CreateArticle = () => {
       layout: 'wide',
     },
   });
+
+  const title = form.watch('title');
+
+  useEffect(() => {
+    if (title) {
+      form.setValue('id', slugify(title), { shouldValidate: true });
+    }
+  }, [title, form]);
 
   async function onSubmit(values: z.infer<typeof articleSchema>) {
     setIsSubmitting(true);

@@ -24,7 +24,7 @@ const Article = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse font-serif text-2xl italic">{t('opening_manuscript')}</div>
+        <div className="animate-pulse font-serif text-2xl italic">{t('opening_article')}</div>
       </div>
     );
   }

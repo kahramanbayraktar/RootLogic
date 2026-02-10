@@ -145,7 +145,7 @@ const EditArticle = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse font-serif text-2xl italic">Retrieving the manuscript...</div>
+        <div className="animate-pulse font-serif text-2xl italic">Retrieving the article...</div>
       </div>
     );
   }

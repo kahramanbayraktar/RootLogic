@@ -19,8 +19,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import instructionsData from '@/data/article_instructions.json';
 import { Article, createArticle, uploadImageFromUrl } from '@/data/articles';
-import { generateImageWithGemini } from '@/lib/gemini';
+import { generateImageWithGemini, generateTextWithGemini } from '@/lib/gemini';
 import { slugify } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -44,6 +45,7 @@ const articleSchema = z.object({
   author: z.string().min(2),
   image_url: z.string().url().optional().or(z.literal('')),
   layout: z.enum(['wide', 'narrow', 'full']).default('wide'),
+  ai_instructions: z.string().optional(),
 });
 
 const CreateArticle = () => {
@@ -65,6 +67,7 @@ const CreateArticle = () => {
       author: 'The Root Logic',
       image_url: '',
       layout: 'wide',
+      ai_instructions: instructionsData.template1,
     },
   });
 
@@ -103,6 +106,49 @@ const CreateArticle = () => {
     }
   };
 
+  const generateAIContent = async () => {
+    const toastId = toast.loading('Generating article content...');
+    
+    // Use instructions from the form field (which defaults to JSON content but is editable)
+    const currentInstructions = form.getValues('ai_instructions');
+    // Title is now optional context, not mandatory
+    const topic = `${title || 'the main topic'}${subtitle ? ': ' + subtitle : ''}`;
+    
+    if (!currentInstructions) {
+       toast.error('Instructions are missing.');
+       return;
+    }
+
+    const prompt = `${currentInstructions} "${topic}"
+    
+    Additional Context:
+    Category: ${form.getValues('category')}.
+    Target Length: around 800 words.`;
+
+    try {
+        const { text, error } = await generateTextWithGemini(prompt);
+        if (error) throw new Error(error);
+        
+        if (text) {
+            form.setValue('content', text, { shouldValidate: true });
+            
+            // Generate a teaser if empty
+            if (!form.getValues('teaser')) {
+                const teaserPrompt = `Write a 2 sentence teaser for this article: ${title}`;
+                const teaserRes = await generateTextWithGemini(teaserPrompt);
+                if (teaserRes.text) {
+                    form.setValue('teaser', teaserRes.text, { shouldValidate: true });
+                }
+            }
+            
+            toast.success('Content generated', { id: toastId });
+        }
+    } catch (e) {
+        console.error(e);
+        toast.error('Failed to generate text', { id: toastId });
+    }
+  };
+
   useEffect(() => {
     if (title) {
       form.setValue('id', slugify(title), { shouldValidate: true });
@@ -123,8 +169,11 @@ const CreateArticle = () => {
         }
       }
 
+      // Separate ai_instructions from the rest of the values
+      const { ai_instructions, ...submissionValues } = values;
+
       const articleData: Article = {
-        ...values,
+        ...submissionValues,
         id: values.id,
         image_url: finalImageUrl || undefined,
       } as Article;
@@ -217,8 +266,8 @@ const CreateArticle = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="psychology">{t('cat_psychology_analyses')}</SelectItem>
-                            <SelectItem value="philosophy">{t('cat_philosophical_inquiries')}</SelectItem>
+                            <SelectItem value="psychology">{t('cat_psychology')}</SelectItem>
+                            <SelectItem value="philosophy">{t('cat_philosophy')}</SelectItem>
                             <SelectItem value="health">{t('cat_health')}</SelectItem>
                           </SelectContent>
                         </Select>
@@ -227,6 +276,25 @@ const CreateArticle = () => {
                     )}
                   />
 
+                  <FormField
+                    control={form.control}
+                    name="ai_instructions"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>AI Architecture Instructions (The Root Architect)</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="System instructions..." 
+                            className="resize-y min-h-[150px] font-mono text-xs text-muted-foreground" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormDescription>These instructions define the persona and rules for the AI writer.</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
                   <FormField
                     control={form.control}
                     name="teaser"
@@ -250,7 +318,18 @@ const CreateArticle = () => {
                     name="content"
                     render={({ field }) => (
                       <FormItem className="md:col-span-2">
-                        <FormLabel>Content (Markdown)</FormLabel>
+                        <FormLabel className="flex justify-between items-center">
+                          Content (Markdown)
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={generateAIContent}
+                            className="h-7 text-[10px] gap-1 px-2 border border-primary/20 hover:bg-primary/10 transition-colors"
+                          >
+                            <Sparkles size={12} className="text-primary" /> Write with AI
+                          </Button>
+                        </FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Use Markdown for formatting..." 

@@ -33,13 +33,23 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProp
         <button
           key={key}
           onClick={() => onCategoryChange(key)}
-          className={`filter-button px-4 py-2 transition-all duration-300 rounded-sm ${
+          className={`filter-button px-6 py-2 transition-all duration-300 relative group ${
             activeCategory === key
-              ? 'bg-foreground text-background'
-              : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
+              ? 'text-foreground font-medium'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
-          {label}
+          <span className="relative z-10 transition-colors duration-300">
+            {label}
+          </span>
+          {activeCategory === key && (
+            <motion.div
+              layoutId="active-category"
+              className="absolute inset-x-0 bottom-0 h-[2px] bg-primary mx-4"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+          <div className="absolute inset-x-0 bottom-0 h-[2px] bg-primary/10 mx-4 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" />
         </button>
       ))}
     </motion.div>

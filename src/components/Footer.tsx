@@ -1,9 +1,11 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Logo from './Logo';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const { isAuthenticated, logout } = useAuth();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -36,6 +38,22 @@ const Footer = () => {
           <p className="text-xs text-muted-foreground">
             © {currentYear} The Root Logic.
           </p>
+
+          <div className="mt-4">
+            <button
+              onClick={() => {
+                if (isAuthenticated) {
+                  logout();
+                  window.location.href = '/';
+                } else {
+                  window.location.href = '/login';
+                }
+              }}
+              className="text-[10px] uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity"
+            >
+              {isAuthenticated ? 'Logout' : 'Admin Login'}
+            </button>
+          </div>
         </div>
       </div>
     </motion.footer>

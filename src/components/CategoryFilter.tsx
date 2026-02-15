@@ -23,36 +23,44 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProp
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-      className="flex flex-wrap gap-3 justify-center"
-    >
-      {allCategories.map(({ key, label }) => (
-        <button
-          key={key}
-          onClick={() => onCategoryChange(key)}
-          className={`filter-button px-6 py-2 transition-all duration-300 relative group ${
-            activeCategory === key
-              ? 'text-foreground font-medium'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          <span className="relative z-10 transition-colors duration-300">
-            {label}
-          </span>
-          {activeCategory === key && (
-            <motion.div
-              layoutId="active-category"
-              className="absolute inset-x-0 bottom-0 h-[2px] bg-primary mx-4"
-              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-            />
-          )}
-          <div className="absolute inset-x-0 bottom-0 h-[2px] bg-primary/10 mx-4 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" />
-        </button>
-      ))}
-    </motion.div>
+    <div className="relative w-full max-w-4xl mx-auto overflow-hidden">
+      {/* Editorial Fade Mask - Left */}
+      <div className="absolute left-0 top-0 bottom-0 w-12 z-20 pointer-events-none bg-gradient-to-r from-background to-transparent" />
+      
+      {/* Editorial Fade Mask - Right */}
+      <div className="absolute right-0 top-0 bottom-0 w-12 z-20 pointer-events-none bg-gradient-to-l from-background to-transparent" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="flex flex-nowrap items-center gap-4 md:gap-8 overflow-x-auto no-scrollbar pt-1 pb-4 px-12 snap-x snap-mandatory justify-start md:justify-center"
+      >
+        {allCategories.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => onCategoryChange(key)}
+            className={`filter-button whitespace-nowrap transition-all duration-300 relative group snap-center py-2 ${
+              activeCategory === key
+                ? 'text-foreground font-medium scale-105'
+                : 'text-muted-foreground/60 hover:text-foreground'
+            }`}
+          >
+            <span className="text-xs md:text-sm font-ui tracking-[0.2em] relative z-10">
+              {label}
+            </span>
+            
+            {activeCategory === key && (
+              <motion.div
+                layoutId="active-category-indicator"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary"
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              />
+            )}
+          </button>
+        ))}
+      </motion.div>
+    </div>
   );
 };
 

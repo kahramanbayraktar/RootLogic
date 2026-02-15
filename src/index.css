@@ -514,4 +514,17 @@
     font-family: var(--font-thought-author) !important;
     opacity: 0.7;
   }
+
+  /* Utility Classes */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .mask-linear-edges {
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
 }

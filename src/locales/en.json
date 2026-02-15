@@ -18,5 +18,6 @@
     "search_press_enter": "Press enter to search",
     "not_found_title": "Page Not Found",
     "not_found_text": "The page you are looking for has vanished into the depths of thought.",
-    "error_loading_articles": "Error loading articles. Please check your connection."
+    "error_loading_articles": "Error loading articles. Please check your connection.",
+    "searching_for": "Searching for"
 }

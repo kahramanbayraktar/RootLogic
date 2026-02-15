@@ -1,18 +1,31 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Search, X } from 'lucide-react';
+import { LogOut, Search, X } from 'lucide-react';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
 import Logo from './Logo';
 
 const Navigation = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border/50">
+    <header className="fixed top-0 left-0 right-0 z-[100] bg-background/90 backdrop-blur-md border-b border-border/50">
       <nav className="max-w-6xl mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -21,15 +34,14 @@ const Navigation = () => {
             className="flex items-center gap-4 group transition-all duration-300"
           >
             <Logo className="w-16 h-8 text-foreground group-hover:text-primary transition-colors duration-500" />
-            <div className="logo-text text-2xl tracking-[-0.03em] flex flex-col md:flex-row md:items-baseline">
+            <div className="logo-text text-2xl tracking-[-0.03em] flex flex-row items-baseline gap-1.5">
               <span className="font-semibold">Root</span>
-              <span className="italic font-normal md:ml-1 opacity-70 group-hover:opacity-100 transition-opacity">Logic</span>
+              <span className="italic font-normal opacity-70 group-hover:opacity-100 transition-opacity">Logic</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <LanguageSwitcher />
               
               <button
@@ -39,10 +51,22 @@ const Navigation = () => {
               >
                 <Search size={18} strokeWidth={1.5} />
               </button>
+
+              {isAuthenticated && (
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate('/');
+                  }}
+                  className="flex items-center gap-2 text-xs font-ui uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 border border-border/50 px-3 py-1.5 rounded-full"
+                >
+                  <LogOut size={12} />
+                  Logout
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="flex items-center gap-4 md:hidden">
             <LanguageSwitcher />
             <button
@@ -52,34 +76,46 @@ const Navigation = () => {
             >
               <Search size={20} />
             </button>
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+                className="text-muted-foreground"
+              >
+                <LogOut size={20} />
+              </button>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Search Modal */}
-      <AnimatePresence>
-        {isSearchOpen && (
+      {/* Search Modal - Portal to Body for absolute z-index priority */}
+      {isSearchOpen && createPortal(
+        <AnimatePresence mode="wait">
           <motion.div
+            key="search-modal"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-background/98 z-50 flex items-start justify-center pt-32"
+            className="fixed inset-0 bg-background z-[1000] flex items-start justify-center pt-32"
           >
             <div className="w-full max-w-xl px-6">
-              <div className="flex items-center gap-4 border-b border-border pb-4">
+              <form onSubmit={handleSearch} className="flex items-center gap-4 border-b border-border pb-4">
                 <Search size={20} className="text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Search articles..."
+                  placeholder={t('search_placeholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="flex-1 bg-transparent text-lg outline-none placeholder:text-muted-foreground"
                   autoFocus
                 />
                 <button
+                  type="button"
                   onClick={() => {
-                    setIsSearchOpen(false);
                     setIsSearchOpen(false);
                     setSearchQuery('');
                   }}
@@ -88,14 +124,15 @@ const Navigation = () => {
                 >
                   <X size={20} />
                 </button>
-              </div>
-              <p className="mt-6 text-sm text-muted-foreground text-center">
-                {searchQuery ? 'Press enter to search' : 'Type to search articles'}
+              </form>
+              <p className="mt-6 text-sm text-muted-foreground text-center font-ui uppercase tracking-widest opacity-60">
+                {searchQuery ? t('search_press_enter') : t('search_hint')}
               </p>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </header>
   );
 };

@@ -6,14 +6,19 @@ import ThoughtOfTheDay from '@/components/ThoughtOfTheDay';
 import { categories, fetchArticles } from '@/data/articles';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 type CategoryKey = keyof typeof categories | 'all';
 
 const Index = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('all');
+  
+  const searchResult = searchParams.get('q') || '';
 
   const { data: articles = [], isLoading, isError } = useQuery({
     queryKey: ['articles'],
@@ -21,9 +26,25 @@ const Index = () => {
   });
 
   const filteredArticles = useMemo(() => {
-    if (activeCategory === 'all') return articles;
-    return articles.filter(article => article.category === activeCategory);
-  }, [activeCategory, articles]);
+    let result = articles;
+    
+    // Category Filter
+    if (activeCategory !== 'all') {
+      result = result.filter(article => article.category === activeCategory);
+    }
+    
+    // Search Filter
+    if (searchResult) {
+      const query = searchResult.toLowerCase();
+      result = result.filter(article => 
+        article.title.toLowerCase().includes(query) || 
+        article.content.toLowerCase().includes(query) ||
+        article.subtitle?.toLowerCase().includes(query)
+      );
+    }
+    
+    return result;
+  }, [activeCategory, articles, searchResult]);
 
   if (isLoading) {
     return (
@@ -44,12 +65,37 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-12"
+          className="mb-6"
         >
-          <CategoryFilter 
-            activeCategory={activeCategory} 
-            onCategoryChange={setActiveCategory} 
-          />
+          <div className="flex flex-col gap-4">
+            <CategoryFilter 
+              activeCategory={activeCategory} 
+              onCategoryChange={setActiveCategory} 
+            />
+            
+            {searchResult && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center justify-center gap-4 py-2 border-y border-border/30 bg-muted/5"
+              >
+                <p className="text-sm font-ui uppercase tracking-[0.2em] text-muted-foreground">
+                  {t('searching_for')}: <span className="text-foreground font-bold italic">"{searchResult}"</span>
+                </p>
+                <button
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams);
+                    params.delete('q');
+                    setSearchParams(params);
+                  }}
+                  className="p-1 hover:bg-muted rounded-full transition-colors"
+                  aria-label="Clear search"
+                >
+                  <X size={14} />
+                </button>
+              </motion.div>
+            )}
+          </div>
         </motion.section>
 
         {/* Articles Masonry Grid */}

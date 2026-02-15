@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ReadingProgress from '@/components/ReadingProgress';
+import { useAuth } from '@/contexts/AuthContext';
 import { categories, fetchArticleById, formatDate } from '@/data/articles';
 import { toUpper } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -14,6 +15,7 @@ import ReactMarkdown from 'react-markdown';
 const Article = () => {
   const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { isAuthenticated } = useAuth();
 
   const { data: article, isLoading, isError } = useQuery({
     queryKey: ['article', id],
@@ -55,19 +57,21 @@ const Article = () => {
             </Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Link 
-              to={`/edit/${id}`} 
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 ui-label"
+          {isAuthenticated && (
+            <motion.div
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
             >
-              <Pencil size={15} />
-              {t('edit_article')}
-            </Link>
-          </motion.div>
+              <Link 
+                to={`/edit/${id}`} 
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 ui-label"
+              >
+                <Pencil size={15} />
+                {t('edit_article')}
+              </Link>
+            </motion.div>
+          )}
         </div>
 
         {/* Article Header */}

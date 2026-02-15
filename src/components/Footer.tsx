@@ -39,21 +39,19 @@ const Footer = () => {
             © {currentYear} The Root Logic.
           </p>
 
-          <div className="mt-4">
-            <button
-              onClick={() => {
-                if (isAuthenticated) {
+          {isAuthenticated && (
+            <div className="mt-4">
+              <button
+                onClick={() => {
                   logout();
                   window.location.href = '/';
-                } else {
-                  window.location.href = '/login';
-                }
-              }}
-              className="text-[10px] uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity"
-            >
-              {isAuthenticated ? 'Logout' : 'Admin Login'}
-            </button>
-          </div>
+                }}
+                className="text-[10px] uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </motion.footer>

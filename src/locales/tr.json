@@ -18,5 +18,6 @@
     "search_press_enter": "Aramak için enter'a basın",
     "not_found_title": "Sayfa Bulunamadı",
     "not_found_text": "Aradığınız sayfa düşüncelerin derinliklerinde kaybolmuş olabilir.",
-    "error_loading_articles": "Yazılar yüklenirken hata oluştu. Lütfen bağlantınızı kontrol edin."
+    "error_loading_articles": "Yazılar yüklenirken hata oluştu. Lütfen bağlantınızı kontrol edin.",
+    "searching_for": "Arama sonucu"
 }

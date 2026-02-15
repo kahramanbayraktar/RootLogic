@@ -2,7 +2,8 @@ import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ReadingProgress from '@/components/ReadingProgress';
 import { useAuth } from '@/contexts/AuthContext';
-import { categories, fetchArticleById, formatDate } from '@/data/articles';
+import { fetchArticleById, formatDate, categories as staticCategories } from '@/data/articles';
+import { fetchCategories } from '@/data/categories';
 import { toUpper } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -17,11 +18,31 @@ const Article = () => {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useAuth();
 
+  const { data: categoriesData = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  });
+
   const { data: article, isLoading, isError } = useQuery({
     queryKey: ['article', id],
     queryFn: () => (id ? fetchArticleById(id) : Promise.resolve(null)),
     enabled: !!id,
   });
+
+  // Helper to get category label
+  const getCategoryLabel = (slug: string) => {
+    // 1. Try dynamic categories
+    const dynamicCat = categoriesData.find(c => c.slug === slug);
+    if (dynamicCat) return t(dynamicCat.label);
+    
+    // 2. Try static categories (legacy)
+    // @ts-ignore - indexing with string on specific keys
+    const staticCat = staticCategories[slug];
+    if (staticCat) return t(staticCat.label);
+    
+    // 3. Fallback to slug title-cased or straight
+    return slug.charAt(0).toUpperCase() + slug.slice(1);
+  };
 
   if (isLoading) {
     return (
@@ -32,6 +53,12 @@ const Article = () => {
   }
 
   if (isError || !article) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Check if category is hidden
+  const categoryData = categoriesData.find(c => c.slug === article.category);
+  if (categoryData?.is_hidden && !isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
@@ -84,7 +111,7 @@ const Article = () => {
           >
             {/* Category */}
             <span className="category-badge text-xs tracking-widest uppercase text-primary mb-4 block">
-              {toUpper(t(categories[article.category]?.label || 'Uncategorized'), i18n.language)}
+              {toUpper(getCategoryLabel(article.category), i18n.language)}
             </span>
             
             {/* Title */}

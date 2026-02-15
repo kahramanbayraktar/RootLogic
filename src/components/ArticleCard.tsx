@@ -1,5 +1,7 @@
-import { Article, categories, formatDate } from '@/data/articles';
+import { Article, formatDate, categories as staticCategories } from '@/data/articles';
+import { fetchCategories } from '@/data/categories';
 import { toUpper } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,8 +14,29 @@ interface ArticleCardProps {
 
 const ArticleCard = ({ article, index }: ArticleCardProps) => {
   const { t, i18n } = useTranslation();
+  
+  const { data: categoriesData = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  });
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  // Helper to get category label
+  const getCategoryLabel = (slug: string) => {
+    // 1. Try dynamic categories
+    const dynamicCat = categoriesData.find(c => c.slug === slug);
+    if (dynamicCat) return t(dynamicCat.label);
+    
+    // 2. Try static categories (legacy)
+    // @ts-ignore - indexing with string on specific keys
+    const staticCat = staticCategories[slug];
+    if (staticCat) return t(staticCat.label);
+    
+    // 3. Fallback to slug title-cased or straight
+    return slug.charAt(0).toUpperCase() + slug.slice(1);
+  };
 
   // Determine layout class based on article layout property
   const layoutClass = {
@@ -64,7 +87,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.5, delay: staggerDelay + 0.2 }}
           >
-            {toUpper(t(categories[article.category]?.label || 'Uncategorized'), i18n.language)}
+            {toUpper(getCategoryLabel(article.category), i18n.language)}
           </motion.span>
           
           {/* Title with reveal animation */}

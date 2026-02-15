@@ -11,6 +11,7 @@ import CreateArticle from "./pages/CreateArticle";
 import EditArticle from "./pages/EditArticle";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import ManageCategories from "./pages/ManageCategories";
 import NotFound from "./pages/NotFound";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -51,6 +52,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <CreateArticle />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/categories" 
+              element={
+                <ProtectedRoute>
+                  <ManageCategories />
                 </ProtectedRoute>
               } 
             />

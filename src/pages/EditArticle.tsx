@@ -33,13 +33,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { fetchCategories } from '@/data/categories';
+//...
+
 const articleSchema = z.object({
   id: z.string().min(3, 'Slug must be at least 3 characters'),
   title: z.string().min(5, 'Title must be at least 5 characters'),
   subtitle: z.string().optional(),
   teaser: z.string().min(10, 'Teaser must be at least 10 characters'),
   content: z.string().min(20, 'Content must be at least 20 characters'),
-  category: z.enum(['psychology', 'philosophy', 'health']),
+  category: z.string().min(1, 'Category is required'),
   date: z.string(),
   reading_time: z.coerce.number().min(1),
   author: z.string().min(2),
@@ -55,8 +58,14 @@ const EditArticle = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const { data: categories = [] } = useQuery({
+      queryKey: ['categories'],
+      queryFn: fetchCategories,
+  });
+
   const { data: article, isLoading, isError } = useQuery({
     queryKey: ['article', id],
+//...
     queryFn: () => (id ? fetchArticleById(id) : Promise.resolve(null)),
     enabled: !!id,
   });
@@ -339,9 +348,19 @@ const EditArticle = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="psychology">{t('cat_psychology')}</SelectItem>
-                            <SelectItem value="philosophy">{t('cat_philosophy')}</SelectItem>
-                            <SelectItem value="health">{t('cat_health')}</SelectItem>
+                            {categories.length > 0 ? (
+                              categories.map((cat) => (
+                                <SelectItem key={cat.id} value={cat.slug}>
+                                  {t(cat.label)}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <>
+                                <SelectItem value="psychology">{t('cat_psychology')}</SelectItem>
+                                <SelectItem value="philosophy">{t('cat_philosophy')}</SelectItem>
+                                <SelectItem value="health">{t('cat_health')}</SelectItem>
+                              </>
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />

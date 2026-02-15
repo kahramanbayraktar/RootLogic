@@ -6,7 +6,7 @@ export interface Article {
   subtitle?: string | null;
   teaser: string;
   content: string;
-  category: 'psychology' | 'philosophy' | 'health';
+  category: string;
   date: string;
   reading_time: number;
   author: string;

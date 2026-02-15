@@ -4,6 +4,8 @@
     "cat_psychology": "Psychology",
     "cat_philosophy": "Philosophy",
     "cat_health": "Health",
+    "cat_software": "Software",
+    "manage_categories": "Manage Categories",
     "all": "All",
     "thought_of_the_day": "Thought of the Day",
     "read_time": "{{count}} min read",

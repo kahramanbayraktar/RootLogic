@@ -39,7 +39,7 @@ const articleSchema = z.object({
   subtitle: z.string().optional(),
   teaser: z.string().min(10, 'Teaser must be at least 10 characters'),
   content: z.string().min(20, 'Content must be at least 20 characters'),
-  category: z.enum(['psychology', 'philosophy', 'health']),
+  category: z.string().min(1, 'Category is required'),
   date: z.string(),
   reading_time: z.coerce.number().min(1),
   author: z.string().min(2),
@@ -52,6 +52,11 @@ const CreateArticle = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: categories = [] } = useQuery({
+      queryKey: ['categories'],
+      queryFn: fetchCategories,
+  });
 
   const form = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
@@ -266,9 +271,19 @@ const CreateArticle = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="psychology">{t('cat_psychology')}</SelectItem>
-                            <SelectItem value="philosophy">{t('cat_philosophy')}</SelectItem>
-                            <SelectItem value="health">{t('cat_health')}</SelectItem>
+                            {categories.length > 0 ? (
+                              categories.map((cat) => (
+                                <SelectItem key={cat.id} value={cat.slug}>
+                                  {t(cat.label)}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <>
+                                <SelectItem value="psychology">{t('cat_psychology')}</SelectItem>
+                                <SelectItem value="philosophy">{t('cat_philosophy')}</SelectItem>
+                                <SelectItem value="health">{t('cat_health')}</SelectItem>
+                              </>
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />

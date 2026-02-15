@@ -1,6 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LogOut, Search, X } from 'lucide-react';
+import { LogOut, Search, Tag, X } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -53,16 +53,25 @@ const Navigation = () => {
               </button>
 
               {isAuthenticated && (
-                <button
-                  onClick={() => {
-                    logout();
-                    navigate('/');
-                  }}
-                  className="flex items-center gap-2 text-xs font-ui uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 border border-border/50 px-3 py-1.5 rounded-full"
-                >
-                  <LogOut size={12} />
-                  Logout
-                </button>
+                <>
+                  <button
+                    onClick={() => navigate('/categories')}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-300 p-2"
+                    title={t('manage_categories')}
+                  >
+                    <Tag size={18} strokeWidth={1.5} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      logout();
+                      navigate('/');
+                    }}
+                    className="flex items-center gap-2 text-xs font-ui uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 border border-border/50 px-3 py-1.5 rounded-full"
+                  >
+                    <LogOut size={12} />
+                    Logout
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -77,8 +86,16 @@ const Navigation = () => {
               <Search size={20} />
             </button>
             {isAuthenticated && (
-              <button
-                onClick={() => {
+              <>
+                <button
+                  onClick={() => navigate('/categories')}
+                  className="text-muted-foreground hover:text-foreground"
+                  aria-label={t('manage_categories')}
+                >
+                  <Tag size={20} />
+                </button>
+                <button
+                  onClick={() => {
                   logout();
                   navigate('/');
                 }}
@@ -86,6 +103,7 @@ const Navigation = () => {
               >
                 <LogOut size={20} />
               </button>
+              </>
             )}
           </div>
         </div>

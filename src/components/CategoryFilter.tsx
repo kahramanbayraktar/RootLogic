@@ -1,24 +1,44 @@
-import { categories } from '@/data/articles';
+import { useAuth } from '@/contexts/AuthContext';
+import { fetchCategories } from '@/data/categories';
 import i18n from '@/i18n';
 import { toUpper } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
-type CategoryKey = keyof typeof categories | 'all';
+// Fallback static categories in case DB is empty or loading fails initially
+const defaultCategories = [
+  { slug: 'psychology', label: 'cat_psychology' },
+  { slug: 'philosophy', label: 'cat_philosophy' },
+  { slug: 'health', label: 'cat_health' },
+];
 
 interface CategoryFilterProps {
-  activeCategory: CategoryKey;
-  onCategoryChange: (category: CategoryKey) => void;
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
 }
 
 const CategoryFilter = ({ activeCategory, onCategoryChange }: CategoryFilterProps) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
   
-  const allCategories: { key: CategoryKey; label: string }[] = [
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  // Filter hidden categories for non-authenticated users
+  const filteredCategories = categories.filter(cat => isAuthenticated || !cat.is_hidden);
+
+  // Merge default categories if DB returns empty (optional, but good for transition)
+  const displayCategories = filteredCategories.length > 0 ? filteredCategories : defaultCategories.filter(cat => isAuthenticated || !cat.is_hidden);
+
+  const allCategories = [
     { key: 'all', label: toUpper(t('all'), i18n.language) },
-    ...Object.entries(categories).map(([key, value]) => ({
-      key: key as CategoryKey,
-      label: toUpper(t(value.label), i18n.language),
+    ...displayCategories.map((cat) => ({
+      key: cat.slug,
+      label: toUpper(t(cat.label), i18n.language),
     })),
   ];
 

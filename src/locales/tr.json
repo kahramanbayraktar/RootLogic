@@ -4,6 +4,8 @@
     "cat_psychology": "Psikoloji",
     "cat_philosophy": "Felsefe",
     "cat_health": "Sağlık",
+    "cat_software": "Yazılım",
+    "manage_categories": "Kategorileri Yönet",
     "all": "Tümü",
     "thought_of_the_day": "Günün Düşüncesi",
     "read_time": "{{count}} dk okuma",

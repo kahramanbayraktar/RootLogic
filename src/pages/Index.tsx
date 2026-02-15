@@ -3,7 +3,9 @@ import CategoryFilter from '@/components/CategoryFilter';
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ThoughtOfTheDay from '@/components/ThoughtOfTheDay';
-import { categories, fetchArticles } from '@/data/articles';
+import { useAuth } from '@/contexts/AuthContext';
+import { fetchArticles } from '@/data/articles';
+import { fetchCategories } from '@/data/categories';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -11,12 +13,11 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
-type CategoryKey = keyof typeof categories | 'all';
-
 const Index = () => {
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState<CategoryKey>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   
   const searchResult = searchParams.get('q') || '';
 
@@ -25,8 +26,22 @@ const Index = () => {
     queryFn: fetchArticles,
   });
 
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  });
+
   const filteredArticles = useMemo(() => {
     let result = articles;
+    
+    // Hidden Category Filter (for public users)
+    if (!isAuthenticated) {
+      const hiddenCategorySlugs = categories
+        .filter(cat => cat.is_hidden)
+        .map(cat => cat.slug);
+      
+      result = result.filter(article => !hiddenCategorySlugs.includes(article.category));
+    }
     
     // Category Filter
     if (activeCategory !== 'all') {

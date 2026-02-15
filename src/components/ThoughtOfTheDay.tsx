@@ -39,13 +39,13 @@ const ThoughtOfTheDay = () => {
       className="floating-widget"
     >
       <div className="p-6 border border-border bg-card/50 backdrop-blur-sm">
-        <span className="block text-[10px] font-semibold tracking-[0.25em] uppercase text-muted-foreground mb-4">
+        <span className="block text-[10px] font-semibold text-muted-foreground mb-4 thought-label">
           {toUpper(t('thought_of_the_day'), i18n.language)}
         </span>
-        <blockquote className="font-serif text-lg leading-snug tracking-tight text-foreground mb-3 italic">
+        <blockquote className="thought-quote text-foreground mb-3 tracking-tight">
           "{thought.quote}"
         </blockquote>
-        <cite className="block text-xs text-muted-foreground not-italic">
+        <cite className="block text-xs text-muted-foreground not-italic thought-author">
           — {thought.author}
         </cite>
       </div>

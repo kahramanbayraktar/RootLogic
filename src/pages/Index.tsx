@@ -28,7 +28,7 @@ const Index = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse font-serif text-2xl italic">{t('library')}</div>
+        <div className="animate-pulse font-serif text-2xl italic">{t('loading_articles')}</div>
       </div>
     );
   }

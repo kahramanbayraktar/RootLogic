@@ -38,7 +38,7 @@ const Article = () => {
       <ReadingProgress />
       <Navigation />
       
-      <main className="pt-32 pb-16">
+      <main className="pt-32 pb-8">
         {/* Back and Edit Links */}
         <div className="max-w-4xl mx-auto px-6 mb-12 flex justify-between items-center">
           <motion.div
@@ -48,7 +48,7 @@ const Article = () => {
           >
             <Link 
               to="/" 
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 ui-label"
             >
               <ArrowLeft size={16} />
               {t('back_to_articles')}
@@ -62,7 +62,7 @@ const Article = () => {
           >
             <Link 
               to={`/edit/${id}`} 
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 ui-label"
             >
               <Pencil size={15} />
               {t('edit_article')}
@@ -79,7 +79,7 @@ const Article = () => {
             className="text-center"
           >
             {/* Category */}
-            <span className="text-xs tracking-widest uppercase text-primary mb-4 block">
+            <span className="category-badge text-xs tracking-widest uppercase text-primary mb-4 block">
               {toUpper(t(categories[article.category]?.label || 'Uncategorized'), i18n.language)}
             </span>
             
@@ -90,19 +90,29 @@ const Article = () => {
 
             {/* Subtitle */}
             {article.subtitle && (
-              <p className="font-serif text-xl md:text-2xl text-muted-foreground italic mb-6 max-w-2xl mx-auto leading-relaxed">
+              <motion.p 
+                className="article-subtitle"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.35 }}
+              >
                 {article.subtitle}
-              </p>
+              </motion.p>
             )}
             
             {/* Meta */}
-            <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-12">
+            <motion.div 
+              className="meta-info flex items-center justify-center gap-4 text-sm text-muted-foreground mb-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
               <time dateTime={article.date}>
                 {formatDate(article.date, i18n.language)}
               </time>
               <span className="w-1 h-1 rounded-full bg-border" />
               <span>{t('read_time', { count: article.reading_time })}</span>
-            </div>
+            </motion.div>
 
             {/* Feature Image */}
             {article.image_url && (

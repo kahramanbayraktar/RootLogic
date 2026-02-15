@@ -80,7 +80,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
           {/* Subtitle */}
           {article.subtitle && (
             <motion.p 
-              className="font-serif text-lg text-muted-foreground italic mb-4 leading-tight"
+              className="article-subtitle"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: staggerDelay + 0.35 }}
@@ -101,7 +101,7 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
           
           {/* Meta */}
           <motion.div 
-            className="flex items-center gap-4 text-xs tracking-wide text-muted-foreground uppercase"
+            className="meta-info flex items-center gap-4 text-xs tracking-wide text-muted-foreground uppercase"
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.5, delay: staggerDelay + 0.5 }}

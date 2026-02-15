@@ -12,14 +12,14 @@ const Footer = () => {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="border-t border-border mt-24"
+      className="border-t border-border mt-12"
     >
       <div className="max-w-4xl mx-auto px-6 py-16">
         <div className="flex flex-col items-center gap-6 text-center">
           {/* Logo */}
           <div className="flex flex-col items-center gap-3">
             <Logo className="w-20 h-10 text-foreground/80" />
-            <h3 className="font-serif text-lg tracking-[0.1em] uppercase opacity-80">
+            <h3 className="font-serif text-lg tracking-[0.1em] opacity-80">
               The Root Logic
             </h3>
           </div>

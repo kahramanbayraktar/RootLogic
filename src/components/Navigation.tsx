@@ -21,9 +21,9 @@ const Navigation = () => {
             className="flex items-center gap-4 group transition-all duration-300"
           >
             <Logo className="w-16 h-8 text-foreground group-hover:text-primary transition-colors duration-500" />
-            <div className="font-serif text-2xl tracking-[-0.03em] flex flex-col md:flex-row md:items-baseline">
-              <span className="font-semibold">ROOT</span>
-              <span className="italic font-normal md:ml-1 opacity-70 group-hover:opacity-100 transition-opacity">LOGIC</span>
+            <div className="logo-text text-2xl tracking-[-0.03em] flex flex-col md:flex-row md:items-baseline">
+              <span className="font-semibold">Root</span>
+              <span className="italic font-normal md:ml-1 opacity-70 group-hover:opacity-100 transition-opacity">Logic</span>
             </div>
           </Link>
 

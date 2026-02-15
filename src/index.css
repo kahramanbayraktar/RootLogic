@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Amarante:ital,wght@0,300;0,400;0,700;0,800;1,400&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amarante:ital,wght@0,300;0,400;0,700;0,800;1,400&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Inconsolata:wght@200..900&family=Ubuntu+Condensed&family=Sofia+Sans+Semi+Condensed:ital,wght@0,1..1000;1,1..1000&family=M+PLUS+Code+Latin:wght@100..700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -50,28 +50,45 @@
     --sepia: 35 40% 85%;
     --ink: 220 30% 8%;
 
-    /* Typography Defaults */
-    --font-serif: 'Amarante', sans-serif;
-    --font-serif-weight: 500;
-    --font-serif-size: 1.25;
-    --font-sans: 'Newsreader', serif;
-    --font-sans-size: 1; 
-    --font-ui: 'Georama', sans-serif;
-    --font-ui-weight: 600;
-    --font-ui-size: 0.9;
+    /* Typography Defaults - Granular Control */
+    --font-logo: 'Amarante', sans-serif;
+    --font-logo-weight: 600;
+    --font-logo-size: 1.5;
+    --font-logo-spacing: -0.03em;
+
+    --font-ui: 'Inconsolata', monospace;
+    --font-ui-weight: 300;
+    --font-ui-size: 0.7;
     --font-ui-spacing: 0.1em;
 
-    /* Spacing rhythm */
-    --space-reading: 80ch;
+    --font-category: 'Inconsolata', monospace;
+    --font-category-weight: 600;
+    --font-category-size: 0.75;
+    --font-category-spacing: 0.2em;
 
-    --sidebar-background: 45 25% 96%;
-    --sidebar-foreground: 220 30% 12%;
-    --sidebar-primary: 160 25% 32%;
-    --sidebar-primary-foreground: 45 25% 96%;
-    --sidebar-accent: 45 15% 90%;
-    --sidebar-accent-foreground: 220 30% 12%;
-    --sidebar-border: 45 15% 82%;
-    --sidebar-ring: 160 25% 32%;
+    --font-title: 'M PLUS Code Latin', sans-serif;
+    --font-title-weight: 600;
+    --font-title-size: 2.5;
+
+    --font-subtitle: 'Sofia Sans', sans-serif;
+    --font-subtitle-weight: 400;
+    --font-subtitle-size: 1.25;
+
+    --font-heading: 'M PLUS Code Latin', sans-serif;
+    --font-heading-weight: 500;
+    --font-heading-size: 1.75;
+
+    --font-body: 'Sofia Sans Semi Condensed', sans-serif;
+    --font-body-weight: 300;
+    --font-body-size: 1.1;
+
+    --font-code: 'JetBrains Mono', monospace;
+    --font-code-size: 0.9;
+
+    /* Thought of the Day - Manual Control */
+    --font-thought-label: 'Inconsolata', monospace;
+    --font-thought-quote: 'Newsreader', serif;
+    --font-thought-author: 'Inconsolata', monospace;
   }
 
   .dark {
@@ -111,15 +128,6 @@
     --cream-dark: 220 20% 12%;
     --sepia: 35 20% 18%;
     --ink: 45 15% 92%;
-
-    --sidebar-background: 220 25% 8%;
-    --sidebar-foreground: 45 15% 88%;
-    --sidebar-primary: 160 30% 50%;
-    --sidebar-primary-foreground: 220 25% 8%;
-    --sidebar-accent: 220 20% 15%;
-    --sidebar-accent-foreground: 45 15% 88%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 160 30% 50%;
   }
 }
 
@@ -134,28 +142,167 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-sans);
-    font-weight: 400;
+    font-family: var(--font-body);
+    font-weight: var(--font-body-weight, 400);
     line-height: 1.7;
     letter-spacing: -0.01em;
     position: relative;
   }
 
-  /* Independent Body Scaling */
-  p, li, article section, .text-content, button, input {
-    font-size: calc(1em * var(--font-sans-size, 1)) !important;
+  /* 1: Logo */
+  .logo-text {
+    font-family: var(--font-logo) !important;
+    font-weight: var(--font-logo-weight, 600) !important;
+    font-size: calc(1em * var(--font-logo-size, 1.5)) !important;
+    letter-spacing: var(--font-logo-spacing, -0.03em) !important;
+    text-transform: none !important;
   }
 
-  /* UI Labels & Navigation */
+  /* 2: UI Labels & Meta */
   .ui-label, 
-  nav a, 
-  .category-badge, 
-  .filter-button {
+  .nav-link,
+  .meta-info {
     font-family: var(--font-ui) !important;
     font-weight: var(--font-ui-weight, 500) !important;
-    font-size: calc(1em * var(--font-ui-size, 1)) !important;
+    font-size: calc(1rem * var(--font-ui-size, 0.9)) !important;
     letter-spacing: var(--font-ui-spacing, 0.05em) !important;
     text-transform: uppercase;
+  }
+
+  /* 3: Category */
+  .category-pill, 
+  .category-badge,
+  .article-card-category {
+    font-family: var(--font-category) !important;
+    font-weight: var(--font-category-weight, 600) !important;
+    font-size: calc(1em * var(--font-category-size, 0.75)) !important;
+    letter-spacing: var(--font-category-spacing, 0.2em) !important;
+    text-transform: uppercase;
+  }
+
+  /* 4: Article Title (H1) */
+  h1 {
+    font-family: var(--font-title) !important;
+    font-weight: var(--font-title-weight, 700) !important;
+    font-size: calc(1em * var(--font-title-size, 2.5)) !important;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  /* 5: Subtitle / Excerpt (Clean, original style) */
+  .article-subtitle {
+    font-family: var(--font-subtitle) !important;
+    font-weight: var(--font-subtitle-weight, 400) !important;
+    font-size: calc(1em * var(--font-subtitle-size, 1.25)) !important;
+    font-style: italic;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    padding: 1.75rem 0;
+    margin: 1.5rem auto 3rem;
+    position: relative;
+    display: block;
+    border-top: 0.5px solid hsl(var(--border) / 0.6);
+    border-bottom: 0.5px solid hsl(var(--border) / 0.6);
+    color: hsl(var(--muted-foreground));
+    max-width: 48rem;
+    text-align: center;
+  }
+
+  .article-subtitle::before {
+    content: "—";
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: hsl(var(--background));
+    padding: 0 1rem;
+    font-size: 0.75rem;
+    color: hsl(var(--border));
+    font-style: normal;
+    letter-spacing: 0;
+  }
+
+  /* 6: Headings (H2, H3) */
+  h2, h3, .article-body h2, .article-body h3 {
+    font-family: var(--font-heading) !important;
+    font-weight: var(--font-heading-weight, 600) !important;
+    font-size: calc(1rem * var(--font-heading-size, 1.75)) !important;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h3, .article-body h3 {
+    font-size: calc(1rem * var(--font-heading-size, 1.75) * 0.85) !important;
+  }
+
+  /* 7: Body Content */
+  p, li, article section, .text-content, .article-body p {
+    font-family: var(--font-body) !important;
+    font-weight: var(--font-body-weight, 400) !important;
+    font-size: calc(1rem * var(--font-body-size, 1.1)) !important;
+  }
+
+  /* Isolation for Typography Lab */
+  #typography-lab, 
+  #typography-lab * {
+    font-family: sans-serif !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+  }
+  
+  #typography-lab h3 {
+    font-family: serif !important;
+    font-size: 1.125rem !important;
+  }
+  
+  #typography-lab label, 
+  #typography-lab span {
+    font-size: 9px !important;
+  }
+
+  /* Special: Code & Pre Blocks */
+  code {
+    font-family: var(--font-code) !important;
+    font-size: calc(1em * var(--font-code-size, 0.9)) !important;
+    background: hsl(var(--muted) / 0.5);
+    color: hsl(var(--foreground));
+    padding: 0.15em 0.4em;
+    border-radius: 15px;
+    /* border: 0.2px solid hsl(var(--foreground) / 0.1); */
+    font-weight: 400;
+  }
+
+  /* Reset inline styles inside pre blocks */
+  pre code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: inherit !important;
+    font-weight: inherit !important;
+    font-size: 1em !important;
+  }
+
+  pre {
+    background: hsl(var(--card) / 0.8) !important;
+    border: 1px solid hsl(var(--border) / 0.4) !important;
+    padding: 1.5rem !important;
+    margin: 2rem 0 !important;
+    border-radius: 6px;
+    overflow-x: auto;
+    position: relative;
+    box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.01);
+  }
+
+  /* Left accent line for code blocks */
+  pre::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: hsl(var(--border) / 0.8);
   }
 
   /* Film grain texture overlay */
@@ -186,14 +333,6 @@
       radial-gradient(ellipse at 20% 20%, hsl(45 30% 94% / 0.5) 0%, transparent 50%),
       radial-gradient(ellipse at 80% 80%, hsl(35 25% 92% / 0.5) 0%, transparent 50%),
       radial-gradient(ellipse at 50% 50%, hsl(45 25% 96%) 0%, hsl(40 20% 94%) 100%);
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif);
-    font-weight: var(--font-serif-weight, 600);
-    font-size: calc(1em * var(--font-serif-size, 1)) !important;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
   }
 
   /* Selection styling */
@@ -261,40 +400,6 @@
     background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
   }
 
-  /* Masonry grid layout */
-  .masonry-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 1.5rem;
-  }
-
-  .masonry-item-wide {
-    grid-column: span 8;
-  }
-
-  .masonry-item-narrow {
-    grid-column: span 4;
-  }
-
-  .masonry-item-full {
-    grid-column: span 12;
-  }
-
-  @media (max-width: 1024px) {
-    .masonry-item-wide,
-    .masonry-item-narrow {
-      grid-column: span 6;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .masonry-item-wide,
-    .masonry-item-narrow,
-    .masonry-item-full {
-      grid-column: span 12;
-    }
-  }
-
   /* Image filter for abstract imagery */
   .image-sepia {
     filter: grayscale(40%) sepia(15%) contrast(1.05);
@@ -348,9 +453,29 @@
   }
 
   .article-body blockquote {
-    @apply pl-8 my-10 text-xl italic border-l-2;
-    border-color: hsl(var(--sage));
-    color: hsl(var(--charcoal-light));
+    @apply pl-10 pr-6 py-8 my-12 text-xl border-l-4;
+    border-color: hsl(var(--foreground) / 0.5);
+    color: hsl(var(--foreground) / 0.9);
+    background: hsl(var(--muted) / 0.2);
+    position: relative;
+  }
+
+  .article-body blockquote p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Drop Cap for Blockquotes (Subtle Intellectual Style) */
+  .article-body blockquote p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-title) !important;
+    font-size: 5rem !important;
+    line-height: 0.75 !important;
+    margin-right: 0.75rem !important;
+    margin-top: 0.2rem !important;
+    color: hsl(var(--foreground) / 0.6) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    text-shadow: 1px 1px 0px hsl(var(--background)), 2px 2px 0px hsl(var(--muted) / 0.2);
   }
 
   .article-body a {
@@ -369,5 +494,24 @@
   .article-body ul li::before {
     content: '—';
     @apply absolute -left-5 text-muted-foreground;
+  }
+
+  /* 9: Thought of the Day Widget */
+  .thought-label {
+    font-family: var(--font-thought-label) !important;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .thought-quote {
+    font-family: var(--font-thought-quote) !important;
+    font-size: 1.15rem !important;
+    line-height: 1.4 !important;
+    font-style: italic;
+  }
+
+  .thought-author {
+    font-family: var(--font-thought-author) !important;
+    opacity: 0.7;
   }
 }

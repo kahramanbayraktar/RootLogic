@@ -2,21 +2,21 @@ import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import instructionsData from '@/data/article_instructions.json';
@@ -199,7 +199,7 @@ const EditArticle = () => {
         date: values.date,
         reading_time: values.reading_time,
         author: values.author,
-        image_url: finalImageUrl || undefined,
+        image_url: finalImageUrl || null,
         layout: values.layout,
       };
 

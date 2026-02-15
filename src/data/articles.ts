@@ -3,16 +3,17 @@ import { supabase } from '@/lib/supabase';
 export interface Article {
   id: string;
   title: string;
-  subtitle?: string;
+  subtitle?: string | null;
   teaser: string;
   content: string;
   category: 'psychology' | 'philosophy' | 'health';
   date: string;
   reading_time: number;
   author: string;
-  image_url?: string;
+  image_url?: string | null;
   layout?: 'wide' | 'narrow' | 'full';
 }
+
 
 export const categories = {
   psychology: { label: 'cat_psychology', slug: 'psychology' },

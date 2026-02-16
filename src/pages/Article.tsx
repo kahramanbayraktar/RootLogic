@@ -1,22 +1,29 @@
 import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import ReadingProgress from '@/components/ReadingProgress';
+import SocialMediaGenerator from '@/components/SocialMediaGenerator';
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { useAuth } from '@/contexts/AuthContext';
 import { fetchArticleById, formatDate, categories as staticCategories } from '@/data/articles';
 import { fetchCategories } from '@/data/categories';
 import { toUpper } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Pencil } from 'lucide-react';
+import { ArrowLeft, Pencil, Share2 } from 'lucide-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, useParams } from 'react-router-dom';
-
 import ReactMarkdown from 'react-markdown';
+import { Link, Navigate, useParams } from 'react-router-dom';
 
 const Article = () => {
   const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useAuth();
+  const [isSocialDialogOpen, setIsSocialDialogOpen] = useState(false);
 
   const { data: categoriesData = [] } = useQuery({
     queryKey: ['categories'],
@@ -89,7 +96,23 @@ const Article = () => {
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}
+              className="flex items-center gap-4"
             >
+              <Dialog open={isSocialDialogOpen} onOpenChange={setIsSocialDialogOpen}>
+                <DialogTrigger asChild>
+                  <button 
+                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 ui-label"
+                    title="Generate Social Post"
+                  >
+                    <Share2 size={15} />
+                    Social Post
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="max-w-fit bg-transparent border-none shadow-none p-0">
+                  <SocialMediaGenerator article={article} onClose={() => setIsSocialDialogOpen(false)} />
+                </DialogContent>
+              </Dialog>
+
               <Link 
                 to={`/edit/${id}`} 
                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 ui-label"

@@ -2,28 +2,30 @@ import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import instructionsData from '@/data/article_instructions.json';
 import { Article, createArticle, uploadImageFromUrl } from '@/data/articles';
+import { fetchCategories } from '@/data/categories';
 import { generateImageWithGemini, generateTextWithGemini } from '@/lib/gemini';
 import { slugify } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';

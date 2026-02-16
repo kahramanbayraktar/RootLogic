@@ -38,20 +38,6 @@ const Footer = () => {
           <p className="text-xs text-muted-foreground">
             © {currentYear} The Root Logic.
           </p>
-
-          {isAuthenticated && (
-            <div className="mt-4">
-              <button
-                onClick={() => {
-                  logout();
-                  window.location.href = '/';
-                }}
-                className="text-[10px] uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity"
-              >
-                Logout
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </motion.footer>

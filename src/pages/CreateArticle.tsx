@@ -2,26 +2,27 @@ import Footer from '@/components/Footer';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import instructionsData from '@/data/article_instructions.json';
 import { Article, createArticle, uploadImageFromUrl } from '@/data/articles';
 import { fetchCategories } from '@/data/categories';
+import { fetchTopics } from '@/data/topics';
 import { generateImageWithGemini, generateTextWithGemini } from '@/lib/gemini';
 import { slugify } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -48,6 +49,7 @@ const articleSchema = z.object({
   image_url: z.string().url().optional().or(z.literal('')),
   layout: z.enum(['wide', 'narrow', 'full']).default('wide'),
   ai_instructions: z.string().optional(),
+  topic: z.string().optional().nullable(),
 });
 
 const CreateArticle = () => {
@@ -58,6 +60,11 @@ const CreateArticle = () => {
   const { data: categories = [] } = useQuery({
       queryKey: ['categories'],
       queryFn: fetchCategories,
+  });
+
+  const { data: topics = [] } = useQuery({
+      queryKey: ['topics'],
+      queryFn: fetchTopics,
   });
 
   const form = useForm<z.infer<typeof articleSchema>>({
@@ -75,6 +82,7 @@ const CreateArticle = () => {
       image_url: '',
       layout: 'wide',
       ai_instructions: instructionsData.template1,
+      topic: null,
     },
   });
 
@@ -288,6 +296,33 @@ const CreateArticle = () => {
                             )}
                           </SelectContent>
                         </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="topic"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Dossier / Topic (Optional)</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a dossier (optional)" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="_none">None</SelectItem>
+                            {topics.map((t) => (
+                              <SelectItem key={t.id} value={t.slug}>
+                                {t.title}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>Assign to a curated dossier section</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

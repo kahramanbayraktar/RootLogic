@@ -70,7 +70,7 @@
     --font-title-weight: 600;
     --font-title-size: 2.5;
 
-    --font-subtitle: 'Sofia Sans', sans-serif;
+    --font-subtitle: 'M PLUS Code Latin', sans-serif;
     --font-subtitle-weight: 400;
     --font-subtitle-size: 1.25;
 
@@ -195,7 +195,7 @@
     font-family: var(--font-subtitle) !important;
     font-weight: var(--font-subtitle-weight, 400) !important;
     font-size: calc(1em * var(--font-subtitle-size, 1.25)) !important;
-    font-style: italic;
+    /* font-style: italic; */
     line-height: 1.6;
     letter-spacing: 0.01em;
     padding: 1.75rem 0;
@@ -208,6 +208,17 @@
     max-width: 48rem;
     text-align: center;
   }
+  
+  .article-card-subtitle {
+     font-family: var(--font-subtitle) !important;
+     font-weight: var(--font-subtitle-weight, 400) !important;
+     font-size: calc(1rem * var(--font-subtitle-size, 1.25) * 0.7) !important;
+     /* font-style: italic; */
+     line-height: 1.4;
+     opacity: 0.7;
+     letter-spacing: 0.01em;
+  }
+
 
   .article-subtitle::before {
     content: "—";

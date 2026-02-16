@@ -34,7 +34,7 @@ import { toast } from 'sonner';
 import * as z from 'zod';
 
 import { fetchCategories } from '@/data/categories';
-//...
+import { fetchTopics } from '@/data/topics';
 
 const articleSchema = z.object({
   id: z.string().min(3, 'Slug must be at least 3 characters'),
@@ -49,6 +49,7 @@ const articleSchema = z.object({
   image_url: z.string().url().optional().or(z.literal('')),
   layout: z.enum(['wide', 'narrow', 'full']).default('wide'),
   ai_instructions: z.string().optional(),
+  topic: z.string().optional().nullable(),
 });
 
 const EditArticle = () => {
@@ -63,9 +64,13 @@ const EditArticle = () => {
       queryFn: fetchCategories,
   });
 
+  const { data: topics = [] } = useQuery({
+      queryKey: ['topics'],
+      queryFn: fetchTopics,
+  });
+
   const { data: article, isLoading, isError } = useQuery({
     queryKey: ['article', id],
-//...
     queryFn: () => (id ? fetchArticleById(id) : Promise.resolve(null)),
     enabled: !!id,
   });
@@ -85,6 +90,7 @@ const EditArticle = () => {
       image_url: '',
       layout: 'wide',
       ai_instructions: instructionsData.template1,
+      topic: null,
     },
   });
 
@@ -180,6 +186,7 @@ const EditArticle = () => {
         image_url: article.image_url || '',
         layout: article.layout || 'wide',
         ai_instructions: instructionsData.template1, // Always load default template for consistency
+        topic: article.topic || null,
       });
     }
   }, [article, form]);
@@ -208,8 +215,10 @@ const EditArticle = () => {
         date: values.date,
         reading_time: values.reading_time,
         author: values.author,
+
         image_url: finalImageUrl || null,
         layout: values.layout,
+        topic: values.topic === '_none' ? null : values.topic,
       };
 
       const result = await updateArticle(id, articleData);
@@ -363,6 +372,33 @@ const EditArticle = () => {
                             )}
                           </SelectContent>
                         </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="topic"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Dossier / Topic (Optional)</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || '_none'}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a dossier (optional)" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="_none">None</SelectItem>
+                            {topics.map((t) => (
+                              <SelectItem key={t.id} value={t.slug}>
+                                {t.title}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>Assign to a curated dossier section</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

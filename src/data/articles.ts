@@ -12,6 +12,7 @@ export interface Article {
   author: string;
   image_url?: string | null;
   layout?: 'wide' | 'narrow' | 'full';
+  topic?: string | null; // Slug of the parent "Dossier/Topic"
 }
 
 

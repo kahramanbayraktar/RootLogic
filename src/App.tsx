@@ -12,7 +12,9 @@ import EditArticle from "./pages/EditArticle";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import ManageCategories from "./pages/ManageCategories";
+import ManageTopics from "./pages/ManageTopics";
 import NotFound from "./pages/NotFound";
+import TopicDetail from "./pages/TopicDetail";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -63,6 +65,15 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/topics" 
+              element={
+                <ProtectedRoute>
+                  <ManageTopics />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/topic/:slug" element={<TopicDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

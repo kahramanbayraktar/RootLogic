@@ -1,6 +1,14 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from '@/contexts/AuthContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LogOut, Search, Tag, X } from 'lucide-react';
+import { LayoutGrid, Library, LogOut, Plus, Search, Tag, X } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -53,25 +61,52 @@ const Navigation = () => {
               </button>
 
               {isAuthenticated && (
-                <>
-                  <button
-                    onClick={() => navigate('/categories')}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300 p-2"
-                    title={t('manage_categories')}
-                  >
-                    <Tag size={18} strokeWidth={1.5} />
-                  </button>
-                  <button
-                    onClick={() => {
-                      logout();
-                      navigate('/');
-                    }}
-                    className="flex items-center gap-2 text-xs font-ui uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 border border-border/50 px-3 py-1.5 rounded-full"
-                  >
-                    <LogOut size={12} />
-                    Logout
-                  </button>
-                </>
+                <div className="flex items-center gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="text-muted-foreground hover:text-foreground transition-colors duration-300 p-2">
+                        <LayoutGrid size={18} strokeWidth={1.5} />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      align="end" 
+                      sideOffset={12}
+                      className="w-56 rounded-none font-ui uppercase tracking-widest text-[10px] bg-background/95 backdrop-blur-md border-border/50 p-1"
+                    >
+                      <DropdownMenuLabel className="opacity-50 px-3 py-2 font-bold tracking-[0.2em]">{t('management')}</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-border/30" />
+                      <DropdownMenuItem 
+                        onClick={() => navigate('/create')}
+                        className="cursor-pointer px-3 py-2 flex items-center gap-3 focus:bg-primary focus:text-white transition-colors"
+                      >
+                        <Plus size={14} /> {t('create_article')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => navigate('/categories')}
+                        className="cursor-pointer px-3 py-2 flex items-center gap-3 focus:bg-primary focus:text-white transition-colors"
+                      >
+                        <Tag size={14} /> {t('categories')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => navigate('/topics')}
+                        className="cursor-pointer px-3 py-2 flex items-center gap-3 focus:bg-primary focus:text-white transition-colors"
+                      >
+                        <Library size={14} /> {t('dossiers')}
+                      </DropdownMenuItem>
+                      
+                      <DropdownMenuSeparator className="bg-border/30" />
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          logout();
+                          navigate('/');
+                        }}
+                        className="cursor-pointer px-3 py-2 flex items-center gap-3 text-destructive focus:bg-destructive focus:text-white transition-colors"
+                      >
+                        <LogOut size={14} /> {t('logout')}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               )}
             </div>
           </div>
@@ -86,24 +121,38 @@ const Navigation = () => {
               <Search size={20} />
             </button>
             {isAuthenticated && (
-              <>
-                <button
-                  onClick={() => navigate('/categories')}
-                  className="text-muted-foreground hover:text-foreground"
-                  aria-label={t('manage_categories')}
-                >
-                  <Tag size={20} />
-                </button>
-                <button
-                  onClick={() => {
-                  logout();
-                  navigate('/');
-                }}
-                className="text-muted-foreground"
-              >
-                <LogOut size={20} />
-              </button>
-              </>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="p-2">
+                        <LayoutGrid size={20} />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" sideOffset={12} className="w-56 rounded-none font-ui uppercase tracking-widest text-[10px] bg-background border-border/50">
+                      <DropdownMenuLabel className="opacity-50 px-3 py-2 font-bold tracking-[0.2em]">{t('management')}</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-border/30" />
+                      <DropdownMenuItem onClick={() => navigate('/create')} className="px-3 py-2 flex items-center gap-3">
+                         <Plus size={14} /> {t('create_article')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/categories')} className="px-3 py-2 flex items-center gap-3">
+                        <Tag size={14} /> {t('categories')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/topics')} className="px-3 py-2 flex items-center gap-3">
+                        <Library size={14} /> {t('dossiers')}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator className="bg-border/30" />
+                      <DropdownMenuItem 
+                        onClick={() => {
+                          logout();
+                          navigate('/');
+                        }}
+                        className="px-3 py-2 flex items-center gap-3 text-destructive"
+                      >
+                        <LogOut size={14} /> {t('logout')}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             )}
           </div>
         </div>

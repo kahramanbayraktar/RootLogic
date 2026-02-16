@@ -138,7 +138,7 @@ const Article = () => {
             </span>
             
             {/* Title */}
-            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
               {article.title}
             </h1>
 
